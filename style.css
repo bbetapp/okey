@@ -1,0 +1,1873 @@
+/* =================================================================== */
+/* 1. التنسيقات العامة والخطوط - إضافة Viewport Fit */
+/* =================================================================== */
+:root {
+  --bg-primary: white;
+  --text-primary: black;
+  --accent-blue: #0A84FF; /* أزرق فاتح */
+  --gray-inactive: #8E8E93;
+  --green-success: #40C77D; /* أخضر فاتح */
+  --red-error: #FF453A; /* أحمر فاتح */
+  --border-radius: 14px; /* زوايا مستديرة أكبر قليلاً */
+  --shadow-light: 0 1px 2px rgba(0, 0, 0, 0.08);
+  --transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-primary: #1C2526; /* خلفية داكنة ناعمة */
+    --text-primary: white;
+    --shadow-light: 0 1px 2px rgba(255, 255, 255, 0.08);
+  }
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  overflow-x: hidden;
+  /* يجب أن يكون ارتفاع الجسم 100% ليتم احتساب مساحات الأمان بشكل صحيح */
+  min-height: 100vh;
+  font-size: 17px;
+}
+
+.screen {
+  position: absolute; /* تغيير إلى Absolute ليعمل بشكل صحيح مع التمرير */
+  top: 0;
+  left: 0;
+  width: 100%;
+  min-height: 100%; /* ضمان ارتفاع كافي */
+  overflow-y: auto;
+  background-color: var(--bg-primary);
+  transition: transform 0.3s var(--transition);
+  /* إضافة padding علوي وسفلي للـ safe area */
+  padding-top: env(safe-area-inset-top, 0); 
+  padding-bottom: env(safe-area-inset-bottom, 0);
+  box-sizing: border-box; /* لضمان أن الـ padding لا يزيد حجم الشاشة */
+}
+
+.hidden {
+  display: none !important;
+  transform: translateX(100%);
+}
+
+/* 💡 إلغاء التباعد من الحاوية الداخلية (إذا كانت لا تعمل بشكل موحد) */
+.app-container {
+  /* نقوم بتصفير التباعد السفلي هنا لضمان عدم وجود تكرار أو تضارب */
+  padding: 28px 28px 28px 28px; 
+}
+
+/* 💡 تطبيق التباعد على الحاوية الخارجية لكل شاشة (الـ .screen) */
+/* ************************************************************
+ * 1. ضبط التمرير الرأسي والتباعد السفلي
+ * ************************************************************/
+
+.screen {
+  position: absolute; 
+  top: 0;
+  left: 0;
+  width: 100%;
+  
+  /* 💡 الأهم: يجب أن يكون الارتفاع 100% للسماح بالتوسع أو 100vh إذا كان المحتوى يتناسب */
+  height: 100vh; /* تحديد الارتفاع ليشغل 100% من النافذة */
+  
+  /* 💡 تفعيل التمرير الرأسي: هذا العنصر هو الذي يجب أن يتولى التمرير */
+  overflow-y: auto !important; 
+  
+  background-color: var(--bg-primary);
+  
+  /* مساحات الأمان (Safe Area) على أجهزة الآيفون الحديثة */
+  padding-top: env(safe-area-inset-top, 20px); 
+  /* تطبيق التباعد السفلي لـ 100px (البانر) + مسافة الأمان */
+  padding-bottom: calc(100px + env(safe-area-inset-bottom, 20px)); 
+  box-sizing: border-box; 
+  
+  /* تحسين التمرير على iOS */
+  -webkit-overflow-scrolling: touch; 
+}
+
+/* 💡 إذا كان .app-container يستخدم داخل .screen */
+.app-container {
+  /* إزالة التباعد السفلي المكرر هنا لضمان أن التمرير يتم بشكل صحيح في .screen */
+  padding: 28px 28px 28px 28px; 
+}
+/* =================================================================== */
+/* 2. شاشة البداية (Home Screen) */
+/* =================================================================== */
+
+.app-title-area {
+  text-align: center;
+  /* ✅ إضافة position: relative لتثبيت زر الإعدادات داخله */
+  position: relative; 
+  /* تعديل الـ padding ليناسب الـ safe area العلوي الذي تم تطبيقه على .screen */
+  padding: 20px 0 48px 0; 
+}
+
+.main-title {
+  font-size: 34px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+  letter-spacing: -0.5px;
+}
+/* ... باقي تنسيقات شاشة البداية بدون تعديل كبير ... */
+.subtitle {
+  font-size: 17px;
+  color: var(--gray-inactive);
+}
+
+.menu-options {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; 
+  margin-top: 40px;
+}
+
+.main-button {
+  padding: 14px;
+  height: 44px; 
+  font-size: 17px;
+  font-weight: 600;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  box-shadow: var(--shadow-light);
+  transition: var(--transition);
+}
+
+.team-option {
+  background-color: var(--green-success);
+  color: white;
+}
+
+.team-option:hover {
+  background-color: #36B36F; 
+  transform: translateY(-2px);
+}
+
+.solo-option {
+  background-color: var(--gray-inactive);
+  color: white;
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* =================================================================== */
+/* 3. شاشة النقاط (Score Screen) - تثبيت الرأس والـ Safe Area */
+/* =================================================================== */
+
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 28px;
+  background-color: var(--bg-primary);
+  box-shadow: var(--shadow-light);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  /* إضافة Safe Area للـ Header الثابت لضمان نزول المحتوى تحت النوتش */
+  padding-top: calc(12px + env(safe-area-inset-top)); 
+}
+
+.app-header h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.action-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  color: var(--accent-blue);
+  transition: var(--transition);
+}
+/* ... باقي تنسيقات شاشة النقاط والمدخلات بدون تعديل كبير ... */
+
+.action-button:active {
+  transform: scale(0.95);
+}
+
+.back-button {
+  color: var(--gray-inactive);
+}
+
+.total-scores-display {
+  display: flex;
+  justify-content: space-around;
+  gap: 20px; 
+  margin-bottom: 28px;
+  /* تقليل الـ padding العلوي لأن الـ Header سيحتوي على الـ safe-area */
+  padding-top: 5px; 
+}
+
+.team-total-card {
+  position: relative;
+  flex: 1;
+  background-color: var(--bg-primary);
+  padding: 14px; 
+  border-radius: var(--border-radius);
+  text-align: center;
+  box-shadow: var(--shadow-light);
+  cursor: pointer;
+  transition: var(--transition);
+  max-width: 160px; 
+}
+
+.team-total-card:active {
+  transform: scale(0.98);
+}
+
+.team-total-card.winner-active {
+  box-shadow: 0 0 10px rgba(64, 199, 125, 0.5);
+  border: 2px solid var(--green-success);
+  background-color: rgba(64, 199, 125, 0.08);
+}
+
+.team-total-card.loser-active {
+  box-shadow: none;
+  border: 2px solid var(--red-error);
+  opacity: 0.85;
+}
+
+.total-label {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 8px 0;
+}
+
+.total-label[contenteditable="true"]:focus {
+  outline: 1px dashed var(--accent-blue);
+}
+
+.total-score {
+  font-size: 36px; 
+  font-weight: 800;
+  color: var(--accent-blue);
+  margin: 0;
+}
+
+/* =================================================================== */
+/* 4. تنسيق مدخل الجولة الجديدة */
+/* =================================================================== */
+
+.new-round-input-area {
+  padding: 40px 0; /* إضافة حشوة (تباعد داخلي) بمقدار 28 بكسل من الأعلى والأسفل، وصفر من الجانبين. */
+  text-align: center; /* توسيط جميع النصوص والعناصر داخل هذه الحاوية أفقياً. */
+}
+
+.win-type-buttons {
+  display: flex; /* ترتيب الأزرار كـ Flexbox لسهولة التحكم في محاذاتها. */
+  justify-content: center; /* توسيط الأزرار أفقياً داخل الحاوية. */
+  gap: 16px; /* مسافة فاصلة بمقدار 16 بكسل بين كل زر وآخر. */
+  margin-bottom: 30px; /* هامش سفلي يفصل بين الأزرار وعناصر الإدخال التالية. */
+  height: 0; /* إخفاء الأزرار مبدئياً عن طريق جعل الارتفاع صفر. */
+  overflow: hidden; /* إخفاء أي محتوى قد يفيض عن الارتفاع صفر. */
+  opacity: 0; /* جعل الأزرار شفافة (غير مرئية). */
+  transition: height 0.3s var(--transition), opacity 0.3s; /* تطبيق تأثير انتقالي (Transition) ناعم عند ظهور الأزرار. */
+}
+
+.win-type-buttons.visible {
+  height: 44px; /* عند إضافة فئة "visible"، يتغير الارتفاع إلى 44 بكسل (لإظهار الأزرار). */
+  opacity: 1; /* جعل الأزرار مرئية بالكامل (شفافية 100%). */
+}
+
+.win-type-button {
+  padding: 10px 25px; /* حشوة داخلية للزر (10 بكسل علوي/سفلي، 18 بكسل جانبي). */
+  height: 40px; /* تثبيت ارتفاع الزر. */
+  font-size: 15px; /* حجم خط النص داخل الزر. */
+  font-weight: 600; /* وزن الخط (غامق نسبياً). */
+  border: 1px solid var(--gray-inactive); /* حدود خارجية رمادية فاتحة بسمك 1 بكسل. */
+  border-radius: var(--border-radius); /* تطبيق استدارة الزوايا (قيمة متغير CSS). */
+  background-color: var(--bg-primary); /* لون خلفية الزر. */
+  color: var(--text-primary); /* لون النص داخل الزر. */
+  cursor: pointer; /* تغيير شكل المؤشر إلى يد عند المرور فوق الزر (للدلالة على أنه قابل للنقر). */
+  transition: var(--transition); /* تطبيق تأثير انتقالي ناعم. */
+}
+
+.win-type-button.active {
+  background-color: var(--accent-blue); /* عند تنشيط الزر، يصبح لون الخلفية أزرق مميز. */
+  color: white; /* يصبح لون النص أبيض. */
+  border-color: var(--accent-blue); /* يصبح لون الحدود أزرق مميز. */
+}
+
+.input-and-multiplier-wrapper {
+  display: flex; /* ترتيب عناصر الإدخال والمضاعف كـ Flexbox. */
+  justify-content: center; /* توسيط العناصر أفقياً. */
+  align-items: center; /* توسيط العناصر عمودياً. */
+  gap: 20px; /* مسافة فاصلة بمقدار 20 بكسل بين حقل الإدخال وزر الإضافة. */
+}
+
+.multiplier-display-box {
+  /* (مُعدَّل) زيادة الحجم ليكون الارتفاع أكبر */
+  padding: 16px 1px; /* <--- (مُعدَّل) حشوة داخلية أكبر لزيادة الارتفاع والعرض */
+  font-size: 20px; /* <--- (مُعدَّل) زيادة حجم الخط ليكون مرئياً */
+  font-weight: 900; /* وزن الخط (غامق). */
+
+  /* 🔴 (مُعدَّل) المربع بالكامل أحمر والنص أبيض */
+  color: white; /* <--- (مُعدَّل) لون النص أبيض */
+  background-color: var(--red-error); /* <--- (جديد) لون الخلفية أحمر */
+  
+  /* الإبقاء على الحدود باللون الأحمر لتكون مطابقة للخلفية */
+  border: 2px solid var(--red-error); 
+  border-radius: var(--border-radius); /* استدارة زوايا المربع. */
+  
+  /* (مُعدَّل) زيادة العرض الأدنى ليتناسب مع الحجم الجديد */
+  min-width: 50px; /* <--- (مُعدَّل) الحد الأدنى لعرض المربع لضمان شكله. */
+  text-align: center; /* توسيط النص داخل المربع. */
+}
+
+#score-input-loser {
+  width: 250px; /* عرض حقل الإدخال. */
+  height: 60px; /* ارتفاع حقل الإدخال. */
+  font-size: 40px; /* حجم خط رقم النتيجة المُدخلة. */
+  text-align: center; /* توسيط النص المُدخل أفقياً. */
+  font-weight: 900; /* وزن خط النص المُدخل. */
+  border-radius: var(--border-radius); /* استدارة زوايا حقل الإدخال. */
+  box-shadow: var(--shadow-light); /* تطبيق ظل خفيف. */
+  padding: 5px; /* حشوة داخلية. */
+  background-color: var(--bg-primary); /* لون خلفية الحقل. */
+  box-sizing: border-box; /* التأكد من أن الـ padding لا يزيد من الحجم الكلي. */
+  border: 1px solid var(--gray-inactive); /* حدود خارجية رمادية فاتحة. */
+  color: var(--red-error); 
+}
+
+#score-input-loser::placeholder {
+  font-size: 30px; /* حجم خط نص العنصر النائب (Placeholder). */
+  color: var(--gray-inactive); /* لون نص العنصر النائب. */
+  line-height: 28px; /* ارتفاع السطر لنص العنصر النائب. */
+}
+
+#add-scores-button {
+  width: 110px; /* عرض زر الإضافة. */
+  height: 44px; /* ارتفاع زر الإضافة. */
+  font-size: 16px; /* حجم خط النص. */
+  font-weight: 600; /* وزن الخط. */
+  background-color: var(--accent-blue); /* لون خلفية أزرق مميز. */
+  color: white; /* لون نص أبيض. */
+  border-radius: var(--border-radius); /* استدارة الزوايا. */
+  box-shadow: var(--shadow-light); /* ظل خفيف. */
+  transition: var(--transition); /* تطبيق تأثير انتقالي ناعم. */
+}
+
+#add-scores-button:disabled {
+  background-color: var(--gray-inactive); /* عند تعطيل الزر، يصبح لونه رمادي غير نشط. */
+  color: white; /* لون النص أبيض. */
+  box-shadow: none; /* إزالة الظل. */
+  cursor: not-allowed; /* تغيير شكل المؤشر للدلالة على عدم القدرة على النقر. */
+}
+
+#add-scores-button:not(:disabled):active {
+  transform: scale(0.98); /* عند النقر على الزر النشط، يتم تصغيره قليلاً (تأثير الضغط). */
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08); /* تغيير الظل قليلاً. */
+}
+
+/* =================================================================== */
+/* 5. تنسيق شارات الانجازات والأيقونات */
+/* =================================================================== */
+
+.achievement-icons {
+  white-space: nowrap; /* منع الإيموجيات من الانتقال إلى سطر جديد. */
+  z-index: 10; /* ضمان ظهور الأيقونات فوق العناصر الأخرى. */
+  margin-top: 10px; /* هامش علوي لدفعه بعيداً عن العناصر التي فوقه. */
+  text-align: left; /* محاذاة النص لليسار افتراضياً (سيتم تجاوزها باستخدام Flexbox لاحقاً). */
+  font-size: 18px; /* حجم خط الأيقونات والإيموجيات. */
+  display: flex; /* ترتيب الأيقونات كـ Flexbox. */
+  gap: 18px; /* مسافة فاصلة بمقدار 18 بكسل بين كل أيقونة والتي تليها. */
+  pointer-events: none; /* تعطيل تفاعل المؤشر مع هذه الأيقونات (لا يمكن النقر عليها). */
+  flex-wrap: nowrap; /* تأكيد منع الأيقونات من النزول لسطر جديد. */
+}
+
+.achievement-icons .achievement-count {
+  font-size: 14px; /* حجم خط رقم الإنجاز (أصغر من الأيقونة نفسها). */
+  font-weight: 600; /* وزن خط الرقم. */
+  position: relative; /* وضعية نسبية للتحكم الدقيق في مكانه. */
+  top: -2px; /* تحريك الرقم قليلاً للأعلى ليصبح محاذياً للأيقونة. */
+  color: #FFD60A; /* لون أصفر فاتح للرقم. */
+  text-shadow: 0 0 2px rgba(0, 0, 0, 0.3); /* إضافة ظل خفيف للنص لجعله أكثر وضوحاً. */
+}
+
+.achievement-icons span {
+  display: inline-block; /* جعل كل عنصر span كتلة داخلية للتحكم في خصائصه. */
+}
+
+#win-icons-theirs {
+  justify-content: flex-start; /* محاذاة أيقونات الفريق الآخر إلى جهة البداية (عادةً اليسار في اتجاه RTL). */
+}
+
+#win-icons-ours {
+  justify-content: flex-end; /* محاذاة أيقونات فريقنا إلى جهة النهاية (عادةً اليمين في اتجاه RTL). */
+}
+
+/* =================================================================== */
+/* 6. تنسيق أزرار +10 */
+/* =================================================================== */
+
+.add-ten-quick-button {
+  position: absolute;
+  top: calc(100% + 8px); 
+  left: 4px;
+  z-index: 20;
+  text-align: center;
+  min-width: 20px;
+  height: 35px;
+  font-size: 15px;
+  line-height: 1.2;
+  background-color: var(--green-success);
+  color: white;
+  border-radius: var(--border-radius);
+  padding: 9px;
+  font-weight: 600;
+  box-shadow: var(--shadow-light);
+  white-space: nowrap;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: var(--transition);
+}
+
+.add-ten-quick-button:first-child {
+  font-size: 16px;
+}
+
+/* =================================================================== */
+/* 7. تنسيق مؤشر نوع الفوز */
+/* =================================================================== */
+
+.win-type-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #40c77d0f; 
+  color: white;
+  font-size: 26px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-shadow: 0 0 4px rgba(0, 0, 0, 0.8);
+  opacity: 0;
+  transition: opacity 0.3s var(--transition);
+  pointer-events: none;
+  z-index: 5;
+  border-radius: var(--border-radius);
+}
+
+.win-type-overlay.show {
+  opacity: 1;
+}
+
+.win-type-overlay .suffix-text {
+  font-size: 20px;
+  font-weight: 600;
+  margin-right: 5px;
+}
+
+/* =================================================================== */
+/* 8. تنسيق شريط التنقل السفلي - تطبيق Safe Area */
+/* =================================================================== */
+
+#bottom-nav-bar, #home-nav-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  /* استخدام خلفية شبه شفافة مع ضبابية iOS */
+  background-color: rgba(242, 242, 242, 0.9);
+  display: flex;
+  justify-content: space-around;
+  /* إضافة padding سفلي ليتجاوز منطقة شريط العودة للرئيسية */
+  padding: 12px 0 calc(12px + env(safe-area-inset-bottom)) 0; 
+  box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.08);
+  z-index: 100;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px); /* دعم سفاري */
+}
+
+@media (prefers-color-scheme: dark) {
+  #bottom-nav-bar, #home-nav-bar {
+      background-color: rgba(28, 37, 38, 0.9); /* خلفية داكنة مناسبة */
+  }
+}
+
+.bottom-nav-bar .nav-button {
+  flex-grow: 1;
+  padding: 12px 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--gray-inactive);
+  font-size: 14px;
+  font-weight: 500;
+  transition: var(--transition);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.bottom-nav-bar .nav-button.active {
+  color: var(--accent-blue);
+  font-weight: 600;
+}
+/* =================================================================== */
+/* 9. تنسيق شاشة السجل (History Screen) - تنسيق 4 أعمدة دقيق */
+/* =================================================================== */
+
+.rounds-history-log {
+    margin-top: 15px;
+    background-color: var(--bg-primary);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-light);
+    overflow: hidden; /* لإخفاء الحدود السفلية الزائدة */
+}
+
+/* 1. تنسيق الرأس (Header) - تحديد تسمية الفرق بدلاً من السجل والحذف */
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* إضافة padding أفقي ليتطابق مع محتوى اللفات */
+  padding: 10px 10px; 
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--gray-inactive);
+  background-color: rgba(142, 142, 147, 0.1); /* خلفية خفيفة للرأس */
+}
+
+/* إعادة تسمية وتحديد عرض الأعمدة في الرأس */
+.history-header .history-label {
+    /* هذا الكلاس سيُستخدم للفريق المنافس (Theirs) */
+    width: 20%; 
+    text-align: right; 
+    padding-right: 5px; /* لمطابقة محاذاة النص في .score-theirs */
+    flex-shrink: 0;
+}
+.history-header .round-label {
+    /* هذا الكلاس سيُستخدم لتفاصيل الجولة (Round Details) */
+    width: 50%; 
+    text-align: center;
+    flex-grow: 1;
+}
+
+/* كلاس مخصص لتسمية فريقنا (Ours) في الرأس */
+.history-header .team-ours-label {
+     width: 20%;
+     text-align: left; 
+     padding-left: 5px; /* لمطابقة محاذاة النص في .score-ours */
+     flex-shrink: 0;
+}
+
+/* كلاس مخصص لزر الحذف في الرأس (لأخذ مساحة مكافئة) */
+.history-header .delete-label { 
+    width: 10%; 
+    flex-shrink: 0;
+}
+
+
+#rounds-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* 2. تنسيق كل صف (Entry) */
+.round-entry { 
+  display: flex;
+  align-items: center;
+  justify-content: space-between; 
+  padding: 10px 10px 10px 0; /* padding أفقي بسيط، إزالة الأيمن للسماح للزر بالاقتراب */
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  background-color: var(--bg-primary);
+}
+/* إزالة الحد السفلي من آخر عنصر */
+.round-entry:last-child {
+    border-bottom: none;
+}
+
+/* 3. تنسيق النقاط (Score Columns) */
+.score-theirs { 
+  width: 20%; 
+  text-align: right; 
+  font-weight: 700;
+  font-size: 16px;
+  /* ترك مسافة عن زر الحذف لليمين (بما أننا RTL) */
+  padding-right: 5px; 
+  flex-shrink: 0; 
+}
+.score-ours { 
+  width: 20%; 
+  text-align: left; 
+  font-weight: 700;
+  font-size: 16px;
+  /* ترك مسافة عن حدود الشاشة لليسار */
+  padding-left: 5px; 
+  flex-shrink: 0; 
+}
+
+
+/* 4. تنسيق التفاصيل في المنتصف (اللاعب والرمز ورقم الجولة) */
+.round-details { 
+    width: 50%; 
+    text-align: center;
+    font-size: 0.95em;
+    flex-grow: 1; /* للسماح لها بالتوسع بين الأعمدة الثابتة */
+    
+    display: flex; 
+    align-items: center;
+    justify-content: center; 
+    
+    gap: 5px; 
+    color: var(--text-primary);
+}
+
+.round-number-text {
+    font-weight: bold;
+    color: var(--gray-inactive);
+    margin-left: 5px;
+}
+
+/* 5. تنسيق زر الحذف (وضعه في سياق الـ Flex) */
+.delete-round-button {
+  position: static; 
+  width: 10%;
+  height: 28px;
+  background: none;
+  border: none;
+  color: var(--red-error);
+  padding: 0 5px 0 10px; /* توسيع منطقة الضغط قليلاً */
+  cursor: pointer;
+  transition: var(--transition);
+  z-index: 20;
+  flex-shrink: 0;
+  opacity: 0.8;
+}
+
+.delete-round-button:active {
+    opacity: 1;
+    transform: scale(0.95);
+}
+
+.delete-round-button .material-symbols-outlined {
+  font-size: 20px !important;
+}
+/* =================================================================== */
+/* 10. تنسيق نمط اللعب (Game Mode Selection) */
+/* =================================================================== */
+
+.game-mode-selection { /* بداية تنسيقات الحاوية الرئيسية لاختيار نمط اللعب */
+  margin-bottom: 5px; /* هامش سفلي يفصلها عن العنصر التالي */
+  padding: 0px; /* حشوة داخلية (فراغ) بمقدار 18 بكسل من جميع الجوانب */
+  border: none; /* إزالة الحدود الافتراضية */
+  border-radius: var(--border-radius); /* استدارة زوايا المربع باستخدام متغير CSS */
+  background-color: var(--bg-primary); /* لون خلفية المربع باستخدام متغير CSS */
+  text-align: center; /* توسيط محاذاة النص والمحتويات داخلياً */
+  box-shadow: var(--shadow-light); /* إضافة ظل خفيف للمربع باستخدام متغير CSS */
+}
+
+.game-mode-selection h2 { /* تنسيقات عنوان القسم داخل المربع */
+  font-size: 15px; /* حجم الخط للعنوان */
+  font-weight: 600; /* سمك الخط (شبه غامق) */
+  color: var(--text-primary); /* لون النص الأساسي للعنوان */
+  margin-bottom: 10px; /* هامش سفلي يفصل العنوان عن الأزرار */
+}
+
+.mode-buttons-container { /* تنسيقات حاوية الأزرار الأفقية */
+  display: flex; /* تفعيل نمط Flexbox لعرض الأزرار جنبًا إلى جنب */
+  justify-content: space-around; /* توزيع الأزرار بشكل متساوٍ مع فراغات حولها */
+  gap: 10px; /* مسافة فاصلة ثابتة بين الأزرار المجاورة */
+}
+
+.mode-button { /* تنسيقات الأزرار الفردية لنمط اللعب */
+  flex-grow: 1; /* جعل الزر يتمدد ليأخذ مساحة متساوية مع باقي الأزرار */
+  padding: 5px 5px; /* حشوة داخلية للزر (فراغ حول النص) */
+  height: 40px; /* ارتفاع ثابت للزر */
+  font-size: 15px; /* حجم الخط داخل الزر */
+  font-weight: 600; /* سمك الخط */
+  border: 1px solid var(--gray-inactive); /* حدود بسمك 1 بكسل ولون رمادي غير نشط */
+  border-radius: var(--border-radius); /* استدارة زوايا الزر */
+  background-color: var(--bg-primary); /* لون خلفية الزر الافتراضي */
+  color: var(--text-primary); /* لون النص الافتراضي */
+  cursor: pointer; /* تغيير شكل المؤشر إلى يد الضغط عند المرور فوقه */
+  transition: var(--transition); /* تطبيق انتقال سلس عند تغيير الخصائص (للحركة) */
+}
+
+.mode-button.active { /* تنسيقات الزر في حالته النشطة (المختار) */
+  background-color: var(--green-success); /* تغيير الخلفية إلى اللون الأخضر (ناجح) */
+  color: white; /* تغيير لون النص إلى الأبيض */
+  border-color: var(--green-success); /* تغيير لون الحدود ليطابق الخلفية النشطة */
+  box-shadow: var(--shadow-light); /* إضافة ظل لتمييز الزر النشط */
+} 
+/*
+/*
+* =========================================================
+* 5. شاشة الرئيسية (Home Screen) - تنسيق اختيار اللاعبين وزر "ابدأ اللعب"
+* =========================================================
+*/
+/* --------------------------------------------------------- */
+/* منطقة اختيار اللاعبين (Player Selection Area) */
+/* --------------------------------------------------------- */
+.player-selection-area { /* حاوية صف اختيار الفريقين (الـ Flex Container) */
+    padding: 0px 0; /* حشوة داخلية علوية وسفلية (صفر لتقليل الفراغ) */
+    display: flex; /* تفعيل نمط Flexbox لعرض الأعمدة جنبًا إلى جنب */
+    gap: 15px; /* مسافة فاصلة بين الأعمدة بمقدار 15 بكسل */
+    justify-content: space-between; /* توزيع الفراغ بين العناصر */
+    flex-direction: row-reverse; /* ترتيب العناصر من اليمين لليسار (الفريق الأول يمينًا) */
+    margin-bottom: 25px; /* هامش سفلي يفصل المنطقة عن زر "ابدأ اللعب" */
+}
+
+.team-column { /* مربع اختيار اللاعبين لكل فريق (العمود) */
+    flex: 1; /* جعل كل عمود يأخذ حصة متساوية من المساحة */
+    text-align: center; /* توسيط محتويات العمود */
+    padding: 10px; /* الحشوة الداخلية تم تقليلها إلى 10 بكسل لتصغير المربع */
+    background-color: var(--active-background); /* لون خلفية رمادية فاتحة للمربع */
+    border-radius: var(--border-radius-base); /* استدارة الزوايا باستخدام المتغير الأساسي */
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.05); /* ظل داخلي خفيف لإعطاء عمق */
+    border: 1px solid var(--border-color); /* حدود خارجية خفيفة */
+}
+
+.team-column h3 { /* عنوان الفريق (مثل: "فريقنا") */
+    font-size: 1em; /* حجم الخط للعنوان (مناسب ومضغوط) */
+    margin-bottom: 10px; /* هامش سفلي يفصل العنوان عن قوائم الاختيار */
+    font-weight: 600; /* سمك خط شبه غامق */
+    color: var(--primary-dark); /* لون غامق يتناسب مع اللون الأساسي للتطبيق */
+}
+
+/* --------------------------------------------------------- */
+/* قائمة الاختيار الاعبين المنسدلة (Select Dropdown) - التعديل */
+/* --------------------------------------------------------- */
+.player-select { 
+    width: 100%; 
+    padding: 5px; 
+    border: 0.5px solid var(--border-color);
+    border-radius: 35px;
+    background-color: var(--card-background); 
+    
+    /* === التعديل هنا: جعل النص غامقاً جداً وواضحاً === */
+    color: #494545; /* لون أسود صريح لضمان الوضوح */
+    font-size: 1em; 
+    font-weight: 700; /* زيادة سمك الخط */
+    
+    text-align: right; 
+    margin-bottom: 10px; 
+    cursor: pointer; 
+    
+    /* تخصيص السهم */
+    display: block; 
+    appearance: none; 
+    -webkit-appearance: none; 
+    padding-right: 25px !important; 
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%235b46e3'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E"); 
+    background-repeat: no-repeat;
+    background-position: left 5px center; 
+    background-size: 30px; 
+    transition: border-color 0.2s;
+}
+
+.player-select option { /* تنسيق الخيارات الفردية داخل القائمة المنسدلة */
+    background-color: var(--card-background); 
+    color: #000000; /* لون أسود صريح للخيار لضمان وضوح النص */
+    font-weight: 700; /* تطبيق نفس سمك الخط على الخيارات */
+}
+
+.small-text-error { /* نص الخطأ الصغير (مثل رسالة "الرجاء التأكد من اختيار لاعب...") */
+    font-size: 0.7em; /* حجم خط صغير جداً */
+    color: var(--red-error); /* لون أحمر للإشارة إلى الخطأ */
+    margin-top: 0px; /* إزالة أي هامش علوي */
+    margin-bottom: 0px; /* إزالة أي هامش سفلي لجعله مضغوطاً */
+    text-align: center; /* توسيط النص */
+    font-weight: 400; /* سمك خط خفيف */
+}
+
+/* --------------------------------------------------------- */
+/* زر "ابدأ اللعب" (Start Game Button) - التعديل لجعله أخضر ومستدير */
+/* --------------------------------------------------------- */
+
+.primary-button { /* الزر الأساسي (ويستخدم هنا لزر "ابدأ اللعب") */
+    width: 100%; /* جعل الزر يملأ عرض الحاوية بالكامل */
+    padding: 15px; /* حشوة داخلية */
+    border: none; /* إزالة أي حدود */
+    
+    /* === التعديل: التأكيد على استدارة الزوايا باستخدام المتغير المُعدّل === */
+--border-radius-base: 20px; /* أو قيمة أكبر مثل 25px إذا أردت المزيد من الاستدارة */    
+    background-color: var(--green-success); /* لون الخلفية الأخضر (عندما لا يكون معطلاً) */
+    color: var(--text-secondary); /* لون النص العكسي (الأبيض) */
+    font-size: 1.1em; /* حجم خط أكبر قليلاً */
+    font-weight: 700; /* سمك خط غامق */
+    cursor: pointer; /* تغيير شكل المؤشر */
+    transition: transform 0.1s, box-shadow 0.2s, background-color 0.2s; /* إضافة انتقال للخلفية */
+    margin-bottom: 15px; /* هامش سفلي */
+    box-shadow: 0 4px 6px rgba(40, 167, 69, 0.3); /* ظل أخضر خفيف للزر النشط */
+}
+
+.primary-button:disabled { /* حالة الزر عندما يكون معطلاً (غير متاح للضغط) */
+    background-color: var(--gray-inactive); /* لون رمادي باهت */
+    border-color: var(--gray-inactive); /* لون حدود رمادي باهت */
+    color: var(--text-secondary); /* إبقاء النص أبيض */
+    opacity: 0.8; /* جعل الزر شبه شفاف */
+    cursor: not-allowed; /* تغيير شكل المؤشر إلى علامة منع */
+    transform: none; /* إزالة أي تأثيرات حركية */
+    box-shadow: none; /* إزالة الظل */
+}
+/* =================================================================== */
+/* 11. تنسيق شاشة الفوز الجديدة (Win Screen) - مُعدَّل بالكامل */
+/* =================================================================== */
+
+/* الحاوية الرئيسية (ملء الشاشة والتوسيط) */
+#win-screen {
+  text-align: center;
+  background-color: var(--bg-primary);
+  /* لملء كامل ارتفاع الشاشة ومنع التمرير */
+  height: 100vh; 
+  display: flex;
+  /* توسيط عمودي */
+  justify-content: center; 
+  /* (مُعدَّل) لإزالة الهامش غير الضروري عند التوسيط */
+  margin-bottom: 0; 
+  /* توسيط أفقي */
+  align-items: center; 
+  padding-top: 0; 
+  padding-bottom: env(safe-area-inset-bottom); 
+  overflow: hidden; 
+}
+
+/* صندوق المحتوى (العناصر الداخلية) */
+.win-screen-content {
+  background-color: var(--bg-primary);
+  /* (مُعدَّل) استدارة الزوايا */
+  border-radius: 40px; 
+  padding: 28px;
+  box-shadow: var(--shadow-light);
+  max-width: 400px; 
+  /* (مُعدَّل) لتوفير مساحة أكبر على الشاشات الصغيرة */
+  width: 100%; 
+  margin-bottom: 0; /* (مُعدَّل) إزالة الهامش غير الضروري */
+  margin-top: 0; 
+  max-height: 90vh; 
+  overflow-y: auto; 
+}
+
+.trophy-container {
+  position: relative;
+  width: 120px; 
+  height: 120px;
+  /* (مُعدَّل) تقليل الهامش السفلي للكأس */
+  margin: 0 auto 15px auto; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.trophy-image {
+  width: 100%;
+  margin-bottom: 0; /* (مُعدَّل) إزالة الهامش غير الضروري */
+  height: auto;
+  animation: bounceIn 1s ease-out;
+}
+
+.confetti {
+  position: absolute;
+  top: 0;
+  margin-bottom: 0; /* (مُعدَّل) إزالة الهامش غير الضروري */
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.win-text {
+  font-size: 32px; 
+  color: var(--accent-blue);
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  margin-top: -10px;
+  text-shadow: none;
+  animation: fadeIn 1.5s ease-out;
+}
+
+#winner-names {
+  font-size: 26px; 
+  color: var(--text-primary);
+  /* (مُعدَّل) تقريب الاسم من العنوان */
+  margin-bottom: 5px; 
+  font-weight: 700;
+}
+
+/* 🟢 (جديد) تنسيق حاوية بطاقات الإحصائيات (Winner/Loser Cards) */
+#win-stats-container {
+    display: flex; 
+    flex-direction: column;
+    gap: -4px; /* مسافة بين بطاقة الفائز وبطاقة الخاسر */
+    width: 100%;
+    margin-top: 15px;
+}
+
+/* 🟢 (جديد) تنسيق عام لبطاقات الإحصائيات */
+.stat-card {
+    border-radius: var(--border-radius);
+    padding: 10px 15px; 
+    box-shadow: var(--shadow-light);
+}
+
+/* 🏆 تخصيص بطاقة الفائز */
+.winner-card {
+    background-color: var(--bg-primary); 
+    border: 1px solid var(--gray-inactive);
+}
+
+/* 💀 تخصيص بطاقة الخاسر (رصاصي شفاف) */
+.loser-card {
+    /* (مُعدَّل) لون خلفية رصاصي شفاف */
+    background-color: rgba(128, 128, 128, 0.1); 
+    /* (مُعدَّل) حدود رمادية خفيفة */
+    border: 1px solid rgba(128, 128, 128, 0.2); 
+}
+
+/* 🟢 (جديد) تنسيق عناوين أقسام الإحصائيات المضافة عبر JS */
+.stats-section-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin-top: 5px; 
+  margin-bottom: 8px; 
+  text-align: center; 
+  padding-bottom: 3px;
+  border-bottom: 1px solid var(--gray-inactive); 
+}
+
+.stats-section-title.winner-title {
+  color: var(--green-success, #4CAF50);
+}
+
+.stats-section-title.loser-title {
+  color: var(--red-error, #D32F2F);
+}
+
+
+/* حاوية الإحصائيات (Win Stats) */
+.win-stats {
+  /* (مُعدَّل) إزالة الهامش العلوي الذي كان يسبب تداخلاً مع العنوان */
+  margin-top: 0; 
+  /* (مُعدَّل) تقليل الهامش السفلي داخل البطاقة */
+  margin-bottom: 5px; 
+  /* ترتيب الإحصائيات في قائمة عمودية وموسّطة */
+  display: flex;
+  flex-direction: column; 
+  align-items: center; 
+  text-align: center; 
+  padding: 0 10px; /* تقليل الحشوة الأفقية داخل البطاقة */
+}
+
+/* سطر الإحصائية الواحدة (العمودين) */
+.win-stats p {
+  /* تحديد عرض الفقرة وتوسيطها */
+  width: 100%; 
+  max-width: 250px; 
+  
+  display: flex;
+  /* دفع الأيقونة والرقم إلى طرفي السطر (عمودين) */
+  justify-content: space-between; 
+  align-items: center;
+  font-size: 16px;
+  margin-top: 0; /* (مُعدَّل) إزالة الهامش العلوي */
+  color: var(--gray-inactive);
+  
+  /* 🔴 (تعديل نهائي) لتقريب الأسطر */
+  margin-bottom: 4px; 
+  
+  /* إضافة خط فاصل خفيف */
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  /* 🔴 (تعديل نهائي) لتقليل المسافة أسفل النص */
+  padding-bottom: 3px; 
+}
+
+/* 🟢 (جديد) تنسيق العمود الأيسر لضمان تجاور الأيقونة والنص */
+.win-stats p .win-stat-left-column {
+    display: inline-flex; 
+    align-items: center;
+    gap: 5px; /* مسافة بسيطة بين الأيقونة والنص */
+}
+
+
+.win-stat-count {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--accent-blue);
+  margin-left: 0; 
+  margin-right: 0; 
+  order: 2; 
+}
+
+.win-stat-icon {
+  font-size: 18px;
+  margin-right: 0; 
+  order: 1; 
+}
+
+/* الأزرار */
+.large-button {
+  width: 90%;
+  /* 🔴 (تعديل نهائي) لتقليل المسافة بين الأزرار */
+  margin-bottom: 4px; 
+  height: 44px;
+  font-size: 16px;
+  font-weight: 600;
+  background-color: var(--accent-blue);
+  color: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-light);
+  transition: var(--transition);
+}
+
+.large-button:active {
+  transform: scale(0.98);
+}
+/* =================================================================== */
+/* 12. تنسيق شاشة اللاعبين (Players Screen) - تنسيقات الصور والرفع */
+/* =================================================================== */
+
+.add-player-form-area {
+    background-color: var(--bg-primary);
+    padding: 20px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-light);
+    margin-top: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+#new-player-name {
+    width: 100%;
+    height: 44px;
+    padding: 10px;
+    font-size: 17px;
+    border: 1px solid var(--gray-inactive);
+    border-radius: var(--border-radius);
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    box-sizing: border-box;
+}
+
+.player-icon-selection p {
+    font-size: 14px;
+    color: var(--gray-inactive);
+    margin: 0 0 10px 0;
+    text-align: right;
+}
+
+/* تنسيقات رفع الصور */
+.icon-upload-area {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08); 
+}
+
+.upload-button {
+    height: 44px;
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.upload-button .material-symbols-outlined {
+    font-size: 1.2em;
+    margin-left: 8px;
+}
+
+.hidden-input {
+    display: none; 
+}
+
+/* تنسيق خيارات الأيقونات الثابتة */
+#icon-options {
+    display: flex;
+    justify-content: flex-end; 
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+/* تنسيق خيار الصورة الثابتة */
+.icon-option {
+    cursor: pointer;
+    opacity: 0.7; 
+    padding: 0;
+    width: 45px; 
+    height: 45px;
+    border: 3px solid transparent;
+    border-radius: 50%; 
+    overflow: hidden;
+    transition: all 0.2s ease-in-out;
+    box-sizing: border-box;
+}
+
+.icon-option img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+    display: block;
+}
+
+.icon-option.selected {
+    opacity: 1;
+    border-color: var(--green-success); 
+    box-shadow: 0 0 8px rgba(64, 199, 125, 0.6);
+    transform: scale(1.05);
+}
+
+/* تنسيق الصورة في قائمة اللاعبين ومعاينة الصورة المرفوعة */
+.player-icon-display {
+    width: 35px; 
+    height: 35px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0; 
+}
+
+/* تنسيق معاينة الصورة المرفوعة */
+#uploaded-icon-preview {
+    width: 45px;
+    height: 45px;
+    border: 3px solid var(--accent-blue); 
+}
+
+
+.player-entry {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.player-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.player-name {
+    font-size: 17px;
+    font-weight: 600;
+}
+
+/* =================================================================== */
+/* تأثيرات الحركة (Animations) */
+/* =================================================================== */
+
+@keyframes bounceIn {
+  0% { transform: scale(0.3); opacity: 0; }
+  50% { transform: scale(1.1); opacity: 1; }
+  70% { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* تنسيق الشاشات الوهمية (Placeholder Screens) */
+.placeholder-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 50vh; 
+    color: var(--gray-inactive);
+}
+
+.placeholder-icon {
+    font-size: 6rem;
+    margin-bottom: 20px;
+}
+
+.placeholder-content h1 {
+    font-size: 3rem;
+    color: var(--primary-color-dark);
+    margin-top: 10px;
+}
+
+.placeholder-content p {
+    font-size: 1.2rem;
+}
+
+/* تنسيق منطقة اختيار اللاعبين في شاشة البداية */
+.team-selection-row {
+    display: flex;
+    justify-content: space-around;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.team-column {
+    flex: 1;
+    text-align: center;
+    border: 1px solid var(--gray-inactive);
+    padding: 10px;
+    border-radius: 8px;
+    background-color: var(--bg-primary); /* تصحيح الخلفية */
+}
+
+.team-column h3 {
+    font-size: 1.1em;
+    margin-bottom: 10px;
+    color: var(--text-primary); /* تصحيح لون الخط */
+}
+
+.player-select {
+    display: block;
+    width: 100%;
+    margin: 5px 0;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid var(--gray-inactive);
+    font-size: 1em;
+    background-color: #f7f7f7;
+    cursor: pointer;
+}
+
+.player-select:focus {
+    border-color: var(--accent-blue); /* تصحيح اللون */
+}
+
+/* تنسيق أسماء الفرق/اللاعبين في شاشة النقاط والسجل (الأسماء فوق بعض) */
+
+/* شاشة النقاط - عنوان الفريق */
+.total-scores-display .total-label {
+    /* السماح بعرض الأسماء على أسطر متعددة */
+    line-height: 1.2; 
+    font-size: 1em; 
+    font-weight: 500;
+}
+
+.rounds-history-log .history-header .round-label {
+    grid-column: 2 / 3; /* تقع في العمود الثاني */
+    text-align: center;
+}
+
+/*==================================================== */
+/* 13. تنسيق زر الإعدادات العلوي (Top Settings Button) */
+/* =================================================================== */
+
+#top-nav-home-settings {
+    /* وضع مطلق بالنسبة لـ .app-title-area */
+    position: absolute; 
+    /* 15px من الأعلى */
+    top: 15px;         
+    /* 15px من اليسار (بسبب RTL، هذا هو الركن الذي سيظهر فيه) */
+    left: 15px;        
+    
+    /* جعل الزر شفافاً ودمجه في الخلفية */
+    background: transparent;
+    border: none;
+    color: var(--gray-inactive); /* لون رمادي خفيف */
+    padding: 8px;
+    margin: 0;
+    cursor: pointer;
+    z-index: 50; 
+    transition: var(--transition);
+}
+
+#top-nav-home-settings:hover {
+    color: var(--accent-blue);
+}
+
+/* تنسيق الأيقونة داخل الزر لتبدو مناسبة */
+#top-nav-home-settings .material-symbols-outlined {
+    font-size: 28px; /* حجم مناسب */
+}
+
+#top-nav-home-settings:active {
+    transform: scale(0.95);
+}
+/* ========================================================== */
+/* أنماط الشاشات المنبثقة (Modals) - تم نقلها من <style> في HTML */
+/* ========================================================== */
+
+.modal {
+    position: fixed;
+    z-index: 1000; 
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.6); 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    padding: 30px 20px;
+    border-radius: 12px;
+    max-width: 90%;
+    width: 350px;
+    position: relative;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.modal-content h2 {
+    /* (يجب تعريف var(--red-error) في style.css) */
+    color: var(--red-error, #D32F2F); 
+    margin-top: 0;
+}
+
+/* زر الإغلاق لـ RTL */
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px; 
+    cursor: pointer;
+    font-size: 24px;
+    color: #888;
+}
+
+.close-button:hover {
+    color: #333;
+}
+
+.selection-group {
+    margin-top: 20px;
+}
+
+.selection-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+/* ========================================================== */
+/* أنماط العناصر الداخلية - تم نقلها من الأنماط المضمنة (style="") في HTML */
+/* ملاحظة: هذه الأنماط قد تحتاج لتعديل إذا كانت تتعارض مع style.css الحالي */
+/* ========================================================== */
+
+/* شاشة اللاعبين (Players Screen) */
+.add-player-form-area input[type="text"]:first-child {
+    /* كان: style="margin-bottom: 10px;" */
+    margin-bottom: 10px; 
+}
+
+/* أيقونة اللاعب (Player Icon) */
+.player-icon-selection input[type="text"] {
+    /* كان: style="text-align: center; font-size: 2em; width: 80px; margin: 10px auto;" */
+    text-align: center; 
+    font-size: 2em; 
+    width: 80px; 
+    margin: 10px auto;
+}
+
+.player-icon-selection .player-icon-display {
+    /* كان: style="margin-bottom: 20px;" */
+    margin-bottom: 20px;
+}
+
+.player-icon-selection #preview-icon {
+    /* كان: style="font-size: 2.5em;" */
+    font-size: 2.5em;
+}
+
+/* شاشة النقاط (Score Screen) */
+.score-input-container {
+    /* كان: style="text-align: center; margin-bottom: 25px;" */
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+/* مجموعات أزرار Header لتنظيم الأيقونات */
+.header-action-group {
+    display: flex; 
+    gap: 10px;
+}
+/*
+====================================
+تنسيقات الزر المستطيل لإضافة اللاعب
+====================================
+*/
+
+.player-add-button-full {
+    margin-top: 25px;      /* مسافة من الأعلى (تحت الهيدر) */
+    margin-bottom: 2px;   /* مسافة قبل نموذج الإضافة أو القائمة */
+    width: 100%;           /* تأكد أنه مستطيل كامل العرض */
+    display: flex;         
+    justify-content: center;
+    align-items: center;
+    gap: 10px;             /* مسافة بين الأيقونة والنص */
+    font-size: 1.1em;
+    font-weight: 600;
+}
+
+.player-add-button-full .material-symbols-outlined {
+    font-size: 1.5em; /* تكبير الأيقونة قليلاً */
+}
+/* ************************************************************ */
+/* تنسيقات سجل الألعاب (مطابقة للصورة الأخيرة) */
+/* ************************************************************ */
+
+/* الألوان الأساسية المستخدمة في التصميم */
+:root {
+    --card-background: #2D393E; /* لون الخلفية الداكن للشريط العلوي */
+    --winner-green: #40C77D; /* لون قسم الفائز */
+    --loser-brown: #FF453A;  /* لون قسم الخاسر */
+    --text-light: #ffffff; /* لون النص الأبيض الفاتح */
+    --text-medium: #cccccc; /* لون النص الرمادي المتوسط */
+    --red-error: #ff5050; /* لون النص الأحمر للأخطاء */
+    --card-padding: 15px; /* تباعد افتراضي للبطاقة */
+}
+
+/* التنسيق العام لحاوية البطاقات */
+#archive-list-container {
+    display: flex; /* ترتيب البطاقات كـ Flexbox */
+    flex-direction: column; /* ترتيب البطاقات بشكل عمودي */
+    gap: 20px; /* مسافة فاصلة عمودية بين البطاقات */
+    padding: 20px 0; /* حشوة داخلية علوية وسفلية */
+}
+
+/* تنسيق البطاقة الواحدة */
+.archive-card {
+    max-width: 600px; /* أقصى عرض للبطاقة */
+    width: 95%; /* عرض البطاقة 95% من الشاشة */
+    margin: 0 auto; /* توسيط البطاقة أفقياً */
+    border-radius: 40px; /* استدارة واضحة لزوايا البطاقة */
+    overflow: hidden; /* إخفاء المحتوى الزائد عن الزوايا المستديرة */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3); /* ظل كبير للبطاقة */
+    background-color: var(--card-background); /* لون الخلفية الداكن */
+}
+
+/* شريط العنوان العلوي (الوقت والتاريخ واللفات) */
+.card-header-bar {
+    display: flex; /* ترتيب عناصر الشريط كـ Flexbox */
+    justify-content: space-between; /* توزيع العناصر على طول الشريط */
+    align-items: center; /* توسيط العناصر عمودياً */
+    padding: 10px var(--card-padding); /* حشوة داخلية */
+    background-color: var(--card-background); /* لون الخلفية الداكن */
+    color: var(--text-light); /* لون النص الأبيض */
+    font-size: 0.8em; /* حجم خط صغير */
+    font-weight: bold; /* تطبيق الوزن الغامق على كل المحتوى الداخلي */
+    border-top-left-radius: 40px; /* يجب أن تتطابق مع البطاقة الرئيسية */
+    border-top-right-radius: 40px;
+}
+
+.header-rounds {
+    display: flex; /* ترتيب الرمز والنص جنباً إلى جنب */
+    align-items: center; /* توسيط عمودي */
+    gap: 5px; /* مسافة فاصلة بين الرمز والنص */
+    order: 3; /* يذهب إلى أقصى اليسار في تصميم RTL */
+}
+.header-time {
+    font-size: 1em; /* يكبر حجم خط الوقت */
+    order: 1; /* يذهب إلى أقصى اليمين في تصميم RTL */
+}
+.header-date-day {
+    display: flex; /* ترتيب العناصر جنباً إلى جنب */
+    align-items: center; /* توسيط عمودي */
+    gap: 5px; /* مسافة فاصلة */
+    order: 2; /* يبقى في المنتصف */
+}
+
+/* ****************** الأقسام الجانبية (الأخضر والبني) ****************** */
+
+.card-score-body {
+    display: flex; /* لتقسيمها إلى قسمين جنباً إلى جنب (الفائز والخاسر) */
+    flex-direction: row; /* يضمن الترتيب الأفقي */
+    text-align: center; /* توسيط النص داخلياً */
+}
+
+.team-section {
+    flex-grow: 1; /* ليأخذ كل قسم مساحة عرض متساوية */
+    padding: var(--card-padding); /* حشوة داخلية */
+    color: var(--text-light); /* لون النص الأبيض */
+    min-height: 130px; /* حد أدنى للارتفاع */
+    display: flex; /* استخدام Flexbox لترتيب محتويات القسم */
+    flex-direction: column; /* ترتيب محتويات القسم عمودياً */
+    justify-content: space-evenly; /* توزيع المسافات بالتساوي بين العناصر */
+    align-items: center; /* توسيط المحتويات أفقياً */
+    position: relative; /* وضعية نسبية لتحديد موقع الإحصائيات (Absolute) */
+}
+
+.stats-icons {
+    display: flex;
+    flex-direction: column; /* لترتيب السطور عموديًا */
+    gap: 2px; /* مسافة بين السطرين */
+}
+
+.stats-line {
+    display: flex; /* لترتيب الإيموجيات أفقيًا */
+    gap: 8px; 
+}
+.winner-section .stats-line {
+    justify-content: flex-end; /* محاذاة لليمين */
+}
+.loser-section .stats-line {
+    justify-content: flex-start; /* محاذاة لليسار */
+}
+/* تنسيق قسم الفائز */
+.winner-section {
+    background-color: var(--winner-green);
+    text-align: center;
+    border-bottom-right-radius: 40px; 
+}
+
+/* تنسيق قسم الخاسر */
+.loser-section {
+    background-color: var(--loser-brown);
+    text-align: center;
+    border-bottom-left-radius: 40px; 
+}
+
+.team-players {
+    font-size: 1em; /* حجم خط مناسب لأسماء اللاعبين */
+    font-weight: bold; /* خط غامق */
+    line-height: 1; /* إزالة التباعد بين السطور */
+    margin-top: 45px; /* <--- (جديد) أضف هذا السطر */; 
+    margin-bottom: 0; 
+}
+
+/* النقاط الكبيرة وأيقوناتها (الكأس/الجمجمة) */
+.team-score {
+    font-size: 2em; /* حجم كبير للنقاط */
+    font-weight: 900; /* سمك خط غامق جداً */
+    margin-top: 0px; /* <--- (جديد) أضف هذا السطر */ 
+    display: flex; /* لترتيب الرقم والأيقونة جنباً إلى جنب */
+    align-items: center; /* توسيط عمودي */
+    justify-content: center; /* توسيط أفقي */
+    gap: 3px; /* تباعد صغير بين الرقم والأيقونة */
+}
+
+/* الأيقونات داخل النقاط */
+.material-symbols-outlined.trophy-icon, 
+.material-symbols-outlined.skull-icon {
+    font-size: 1em; /* حجم مناسب للأيقونات بجانب الرقم */
+    margin: 0; /* إزالة أي تباعد تلقائي */
+    position: static; /* لضمان عدم وجود أي تحديد موقع مطلق */
+}
+.trophy-icon { color: gold; } /* لون الكأس ذهبي */
+.skull-icon { color: white; } /* لون الجمجمة أبيض */
+
+/* ****************** الإحصائيات (الأوكي، العشرات، إلخ) ****************** */
+.stats-icons {
+    font-size: 0.8em; /* حجم خط صغير لأيقونات الإحصائيات */
+    font-weight: bold; /* خط غامق */
+    line-height: 1; /* إزالة التباعد بين السطور */
+    color: var(--text-light); /* لون النص/الرموز أبيض */
+    position: absolute; /* تحديد الموقع مطلقاً بالنسبة للـ team-section */
+    top: 20px; /* <--- (مُعدَّل) تم زيادة هذه القيمة لإنزال الإنجازات */
+    display: flex; /* لترتيب أيقونات الإحصائيات أفقياً */
+    gap: 8px; /* تباعد أكبر بين الأيقونات */
+}
+
+/* محاذاة الإحصائيات للفائز والخاسر */
+.winner-section .stats-icons {
+    right: 15px; /* يضع الإحصائيات على بعد 15 بكسل من الحافة اليمنى */
+    left: auto; /* إلغاء التحديد لليسار */
+}
+.loser-section .stats-icons {
+    left: 15px; /* يضع الإحصائيات على بعد 15 بكسل من الحافة اليسرى */
+    right: auto; /* إلغاء التحديد لليمين */
+}
+/* ******************  لوحة الصدارة****************** */
+
+/* تنسيق شريط التبديل (Tabs) */
+.tab-controls-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 15px;
+    background-color: var(--dark-bg); /* خلفية داكنة */
+    border-bottom: 1px solid var(--gray-border);
+    gap: 10px;
+    position: sticky; /* لجعلها ثابتة في الأعلى */
+    top: 50px; /* تحت شريط التنقل العلوي */
+    z-index: 10;
+}
+
+.tab-button {
+    flex-grow: 1;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 12px; /* زوايا مستديرة أكثر */
+    background-color: var(--gray-active);
+    color: var(--white);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.tab-button.active-tab {
+    background-color: var(--primary-color); /* اللون الأساسي للمميز */
+    color: var(--dark-bg); /* لون الخط الداكن لتباين أفضل */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* تنسيق قائمة لوحة الصدارة */
+.leaderboard-entry {
+    display: flex; /* ترتيب عناصر الصف أفقياً */
+    justify-content: space-between; /* توزيع العناصر على طول الصف */
+    align-items: center; /* توسيط العناصر عمودياً */
+    padding: 12px 0; /* حشوة داخلية علوية وسفلية */
+    border-bottom: 1px solid var(--gray-border); /* خط فاصل سفلي */
+    color: var(--white); /* لون النص الأبيض */
+}
+
+.leader-rank {
+    font-size: 1.2em; /* حجم خط أكبر للترتيب */
+    font-weight: bold; /* خط غامق */
+    min-width: 30px; /* حد أدنى للعرض ليكون الترتيب متناسقاً */
+    text-align: center; /* توسيط رقم الترتيب */
+    color: var(--primary-color); /* لون أساسي لتمييز الترتيب */
+}
+
+.leader-info {
+    display: flex; /* لترتيب اسم اللاعب والأيقونات */
+    align-items: center; /* توسيط عمودي */
+    flex-grow: 1; /* يسمح بالتمدد لأخذ المساحة المتبقية */
+    padding-right: 15px; /* حشوة داخلية يمنى */
+}
+
+.leader-info .player-name {
+    margin-right: 10px; /* مسافة فاصلة بعد اسم اللاعب */
+}
+
+.leader-stats {
+    font-size: 0.9em; /* حجم خط صغير للإحصائيات الثانوية */
+    color: var(--gray-inactive); /* لون رمادي للإحصائيات الثانوية */
+    padding-left: 5px; /* حشوة داخلية يسار */
+}
+
+.leaderboard-entry:first-child .leader-stats, /* المركز الأول */
+.leaderboard-entry:nth-child(2) .leader-stats, /* المركز الثاني */
+.leaderboard-entry:nth-child(3) .leader-stats { /* المركز الثالث */
+    color: var(--green-success); /* تمييز الثلاثة الأوائل باللون الأخضر */
+}
+/* ************************************************************
+ * 2.1. تحسين عرض لوحة الصدارة (Leaderboard) وإصلاح التداخل
+ * ************************************************************/
+
+/* ************************************************************
+ * 2.1. تحسين عرض لوحة الصدارة (Leaderboard) - قيم رقمية للتحكم
+ * ************************************************************/
+
+.leaderboard-entry { 
+    display: flex; /* 1. تفعيل وضع Flexbox لتوزيع الأعمدة أفقياً */
+    align-items: center; /* 2. محاذاة العناصر عمودياً في المنتصف */
+    justify-content: space-between; /* 3. توزيع المساحات بين الأعمدة */
+    
+    padding: 5px 10px; /* 4. مسافة داخلية: 10px رأسي، 15px أفقي */
+    /* background-color: var(--soft-green); -- قيمة لون */
+    margin-bottom: 5px; /* 5. مسافة خارجية سفلية بين البطاقات */
+    border-radius: 18px; /* 💡 قيمة مباشرة لتدوير الزوايا. يمكنك تغييرها لـ 15px, 20px, إلخ. */
+    /* border-radius: var(--border-radius); -- قيمة من متغير */
+    width: 90%; /* 6. عرض البطاقة بالكامل */
+    box-sizing: border-box; /* 7. تضمين البادينغ والحدود ضمن العرض المحدد */
+    min-height: 80px; /* 8. الحد الأدنى لارتفاع البطاقة (لاستيعاب سطرين) */
+    overflow: hidden; /* 9. إخفاء أي محتوى يتجاوز حدود البطاقة */
+}
+
+/* 💡 إخفاء عناوين الأعمدة التي تسبب التداخل على شاشات الجوال */
+.leaderboard-entry .column-title {
+    display: none; /* 10. إخفاء العنوان الرأسي */
+}
+
+/* تنسيق الأعمدة الأربعة الرئيسية */
+.leaderboard-entry .card-column {
+    display: flex; /* 11. تفعيل Flexbox داخل العمود لترتيب المحتوى داخله */
+    flex-direction: column; /* 12. جعل المحتوى داخله عمودياً (العنوان والنص تحته) */
+    justify-content: center; /* 13. محاذاة المحتوى عمودياً في المنتصف */
+    align-items: center; /* 14. محاذاة المحتوى أفقياً في المنتصف */
+    flex-shrink: 15; /* 15. منع العمود من الانكماش بشدة */
+}
+
+/* عمود الترتيب: #01 */
+.rank-column { 
+    min-width: 10px; /* 16. الحد الأدنى لعرض العمود بالبكسل */
+    padding-left: 0; /* 17. لا يوجد مسافة داخلية يسارية إضافية */
+}
+.rank-number {
+    font-weight: bold; /* 18. سماكة الخط */
+    font-size: 1em; /* 19. حجم الخط */
+    /* color: var(--dark-text); -- قيمة لون */
+}
+
+/* عمود اللاعب: الاسم */
+.player-column { 
+    flex-grow: 1; /* 20. السماح له بأخذ المساحة المتبقية */
+    align-items: flex-start; /* 21. محاذاة الاسم لليسار (مقارنة بالترتيب) */
+    
+    margin-left: 0px; /* 💡 إضافة هامش خارجي يسار لإبعاده عن عمود الترتيب */
+    
+    padding: 0 10px; /* 22. مسافة داخلية أفقية: 10px */
+    min-width: 20px; /* 23. الحد الأدنى لعرض العمود بالبكسل */
+}
+.player-name { 
+    font-weight: bold; /* 24. سماكة الخط */
+    font-size: 1em; /* 25. حجم الخط */
+    line-height: 1.2; /* 26. تباعد الأسطر (1.2 مرة من حجم الخط) */
+    /* color: var(--dark-text); -- قيمة لون */
+    white-space: normal; /* 27. السماح بالالتفاف إلى سطر جديد */
+    text-align: right; /* 28. محاذاة النص لليمين */
+}
+
+/* عمود الإنجازات والأداء */
+.achievements-two-lines { 
+    /* 💡 التعديل هنا: استخدام خاصية gap بين العناصر العمودية داخل الحاوية */
+    display: flex;
+    flex-direction: column; /* جعل الصفين مرتبين عمودياً */
+    gap: 10px; /* 💡 المسافة بين السطر العلوي والسفلي (4 بكسل) */
+    
+    min-width: 130px; 
+    max-width: 45%;
+    align-items: flex-end; /* التأكد من محاذاة كل صف لليمين */
+    text-align: right;
+    padding-right: 5px;
+    flex-shrink: 0;
+}
+
+/* صفوف الإنجازات (الأوكي، العشرة، الغش، الفوز...) - الآن يتم التحكم في تباعدها بالـ gap أعلاه */
+.achievements-row {
+    display: flex;
+    flex-wrap: wrap; 
+    justify-content: flex-end; 
+    gap: 5px; /* 38. المسافة بين مجموعات الأيقونات (أفقياً) */
+    font-size: 0.8em; 
+    line-height: 1;
+    /* 💡 إزالة أي margin/padding قد يسبب مشاكل */
+    margin: 0;
+    padding: 0;
+}
+
+/* عمود النقاط */
+.points-column {
+    min-width: 40px; /* 41. الحد الأدنى لعرض عمود النقاط بالبكسل */
+    padding-right: 0; /* 42. لا يوجد مسافة داخلية يمينية إضافية */
+}
+.points-number {
+    font-weight: bold; /* 43. سماكة الخط */
+    font-size: 1em; /* 44. حجم الخط */
+    /* color: var(--dark-text); -- قيمة لون */
+}
+/* تنسيق قائمة لوحة الصدارة */
+.leaderboard-entry {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--gray-border);
+    color: var(--white);
+}
+
+.leader-rank {
+    font-size: 1.2em;
+    font-weight: bold;
+    min-width: 30px;
+    text-align: center;
+    color: var(--primary-color);
+}
+
+.leader-info {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+    padding-right: 15px;
+}
+
+.leader-info .player-name {
+    margin-right: 10px;
+}
+
+.leader-stats {
+    font-size: 0.9em;
+    color: var(--gray-inactive);
+    padding-left: 5px;
+}
+
+.leaderboard-entry:first-child .leader-stats,
+.leaderboard-entry:nth-child(2) .leader-stats,
+.leaderboard-entry:nth-child(3) .leader-stats {
+    color: var(--green-success); /* تمييز الثلاثة الأوائل */
+}
+/* ************************************************************ */
+/* FIX: تغطية الشريط العلوي بالكامل ما عدا الأزرار */
+/* ************************************************************ */
+
+#players-screen .top-nav-bar {
+    position: relative; /* ليكون مرجع الـ absolute */
+    overflow: hidden; /* لإخفاء أي جزء يخرج عن الحدود */
+}
+
+/* طبقة تغطية عملاقة تغطي كل شيء */
+#players-screen .top-nav-bar::before {
+    content: ""; /* ضروري للعنصر الزائف */
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0; 
+    
+    /* هذا يجب أن يكون لون الخلفية الداكنة لتطبيقك (عادة var(--dark-bg)) */
+    background-color: var(--dark-bg); 
+    
+    /* أولوية عالية جداً */
+    z-index: 9999; 
+    
+    /* هذا لمنع التغطية من استقبال النقرات، مما يسمح للأزرار بالعمل */
+    pointer-events: none; 
+}
+
+/* رفع جميع العناصر التفاعلية فوق طبقة التغطية */
+#players-screen .top-nav-bar button, 
+#players-screen .top-nav-bar .header-title {
+    position: relative; 
+    z-index: 10000; /* أعلى أولوية لضمان الظهور */
+}
+/* ************************************************************ */
+/* أنماط عمود الإنجازات والأداء المقسم لسطرين (دمج مع التصميم الحالي) */
+/* ************************************************************ */
+
+/* إزالة الأنماط القديمة للـ stats-column التي لم تعد مستخدمة */
+.stats-column {
+    display: none; /* يتم إخفاؤه لأننا سنستخدم achievements-two-lines بدلاً منه */
+}
+
+/* عمود الإنجازات الجديد */
+.achievements-two-lines {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1; /* للسماح له بالتمدد في المنتصف */
+    min-width: 170px; /* لضمان وجود مساحة كافية للسطرين */
+    text-align: center;
+    padding: 0 8px; /* مطابقة للـ padding في card-column */
+    line-height: 1.2;
+    height: 100%;
+    /* إضافة الفاصل العمودي */
+    border-left: 1px solid rgba(0, 0, 0, 0.1); 
+}
+
+.top-achievements-row {
+    margin-bottom: 3px; /* تباعد خفيف بين السطرين */
+}
