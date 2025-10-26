@@ -1,357 +1,401 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-    
-    <link rel="stylesheet" href="style.css"> 
-    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    
+    <link rel="stylesheet" href="style.css"> 
+    
 </head>
 <body>
 
-    <div id="home-screen" class="app-container main-screen">
-        <header class="app-title-area">
-            <button id="top-nav-home-settings" class="action-button settings-button">
-                <span class="material-symbols-outlined">settings</span>
-            </button>
-        </header>
-        
-        <div id="mode-selection-area" class="game-mode-selection hidden">
-            <h2>اختر طريقة اللعب:</h2>
-            <div class="mode-buttons-container">
-                <button class="mode-button active" data-mode="target-score" data-limit="200">
-                    ±200
-                </button>
-                <button class="mode-button" data-mode="fixed-rounds" data-limit="4">
-                    (4) لفات
-                </button>
-                <button class="mode-button" data-mode="open" data-limit="0">
-                     مفتوح
-                </button>
-            </div>
-        </div>
+    <div id="home-screen" class="app-container main-screen">
+        <header class="app-title-area">
+            <button id="top-nav-home-settings" class="action-button settings-button">
+                <span class="material-symbols-outlined">settings</span>
+            </button>
+        </header>
+        
+        <div id="mode-selection-area" class="game-mode-selection hidden">
+            <h2>اختر طريقة اللعب:</h2>
+            <div class="mode-buttons-container">
+                <button class="mode-button active" data-mode="target-score" data-limit="200">
+                    ±200
+                </button>
+                <button class="mode-button" data-mode="fixed-rounds" data-limit="4">
+                    (4) لفات
+                </button>
+                <button class="mode-button" data-mode="open" data-limit="0">
+                     مفتوح
+                </button>
+            </div>
+        </div>
 
-        <div id="player-selection-area" class="mode-selection-area hidden">
-             <div class="team-column">
-                    <h3>الفريق الأول</h3>
-                     <select id="team2-player1-select" class="player-select main-button team-option" required>
-                        <option value="">اختر اللاعب</option>
-                    </select>
-                    <select id="team2-player2-select" class="player-select main-button team-option">
-                        <option value="">اختيار لاعب إضافي (اختياري)</option>
-                    </select>
-                </div>
-            <div class="team-selection-row">
-                <div class="team-column">
-                    <h3>الفريق الثاني</h3>
-                    <select id="team1-player1-select" class="player-select main-button team-option" required>
-                        <option value="">اختر اللاعب</option>
-                    </select>
-                     <select id="team1-player2-select" class="player-select main-button team-option">
-                        <option value="">اختيار لاعب إضافي (اختياري)</option>
-                    </select>
-                </div>
-            </div>
-            <p class="small-text-error hidden" id="player-selection-error">الرجاء اختيار لاعبين مختلفين لكل فريق.</p>
-            
-            <button id="start-selected-mode-button" class="main-button primary-button" disabled>
-                ابدأ اللعب
-            </button>
-        </div>
-        
-        <section id="game-type-selection" class="menu-options">
-            <button id="team-game-button" class="main-button team-option">
-                لعبة فريق 
-                <i class="icon-people">👥</i> 
-            </button>
-            <button id="solo-game-type-button" class="main-button solo-option">
-                  لعبة فردي
-                <i class="icon-person">👤</i>
-            </button>
-        </section>
-    </div>
-    
+        <div id="player-selection-area" class="mode-selection-area hidden">
+             <div class="team-column">
+                    <h3>الفريق الأول</h3>
+                     <select id="team2-player1-select" class="player-select main-button team-option" required>
+                        <option value="">اختر اللاعب</option>
+                    </select>
+                    <select id="team2-player2-select" class="player-select main-button team-option">
+                        <option value="">اختيار لاعب إضافي (اختياري)</option>
+                    </select>
+                </div>
+            <div class="team-selection-row">
+                <div class="team-column">
+                    <h3>الفريق الثاني</h3>
+                    <select id="team1-player1-select" class="player-select main-button team-option" required>
+                        <option value="">اختر اللاعب</option>
+                    </select>
+                     <select id="team1-player2-select" class="player-select main-button team-option">
+                        <option value="">اختيار لاعب إضافي (اختياري)</option>
+                    </select>
+                </div>
+            </div>
+            <p class="small-text-error hidden" id="player-selection-error">الرجاء اختيار لاعبين مختلفين لكل فريق.</p>
+            
+            <button id="start-selected-mode-button" class="main-button primary-button" disabled>
+                ابدأ اللعب
+            </button>
+        </div>
+        
+        <section id="game-type-selection" class="menu-options">
+            <button id="team-game-button" class="main-button team-option">
+                لعبة فريق 
+                <i class="icon-people">👥</i> 
+            </button>
+            <button id="solo-game-type-button" class="main-button solo-option">
+                  لعبة فردي
+                <i class="icon-person">👤</i>
+            </button>
+        </section>
+    </div>
+    
 <div id="players-screen" class="screen hidden">
-    
- <header class="top-nav-bar">
-        <button id="players-back-button" class="action-button empty-button">
-            </button>
-        <span class="header-title"></span> 
-        <button class="action-button empty-button"></button> 
-        
-        <div class="header-overlay-fix"></div>
-        
-    </header>
+    
+ <header class="top-nav-bar">
+        <button id="players-back-button" class="action-button empty-button">
+            </button>
+        <span class="header-title"></span> 
+        <button class="action-button empty-button"></button> 
+        
+        <div class="header-overlay-fix"></div>
+        
+    </header>
 
-    <div class="tab-controls-container">
-    <button id="leaderboard-button" class="tab-button active-tab">لوحة الصدارة</button>
-    <button id="players-list-button" class="tab-button">قائمة اللاعبين</button>
+    <div class="tab-controls-container">
+    <button id="leaderboard-button" class="tab-button active-tab">لوحة الصدارة</button>
+    <button id="players-list-button" class="tab-button">قائمة اللاعبين</button>
 </div>
 
-    <div class="screen-content">
+    <div class="screen-content">
 
-        <div id="player-management-area">
-            
-            <button id="add-player-button-full" class="main-button primary-button player-add-button-full">
-                <span class="material-symbols-outlined">person_add</span>
-                إضافة لاعب جديد
+        <div id="player-management-area">
+            
+            <button id="add-player-button-full" class="main-button primary-button player-add-button-full">
+                <span class="material-symbols-outlined">person_add</span>
+                إضافة لاعب جديد
+            </button>
+                
+            <section id="add-player-form-area" class="add-player-form-area hidden">
+                
+                <input type="text" id="new-player-name1" placeholder="الاسم الأول" dir="rtl">
+                <input type="text" id="new-player-name2" placeholder="اسم العائلة (اختياري)" dir="rtl">
+                
+              <div class="player-icon-selection">
+                <p>اختر رمزاً/إيموجياً للاعب (حرف واحد):</p>
+                
+                <input type="text" id="new-player-icon-input" placeholder="مثال: 👑" maxlength="2" dir="ltr">
+                
+                <div id="selected-icon-preview" class="player-icon-display">
+                    <span id="preview-icon">👤</span> 
+                </div>
+              </div>
+                
+                <button id="save-new-player" class="main-button team-option">إضافة وحفظ</button>
+            </section>
+
+            <section class="import-section">
+                <p id="import-status"></p>
+            </section>
+            
+            <section class="players-list-section">
+                <ul id="players-list">
+                    </ul>
+            </section>
+        </div>
+        
+        <div id="leaderboard-area" class="hidden">
+            <ul id="leaderboard-list">
+                 </ul>
+        </div>
+        
+    </div>
+</div>
+
+    <div id="score-screen" class="screen hidden">
+        <header class="app-header team-header">
+            <div class="header-action-group">
+                <button id="cancel-game-button" class="action-button">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+                <button id="quick-penalty-button" class="action-button" title="عقوبة سريعة -40">
+                    <span class="material-symbols-outlined">bomb</span>
+                </button>
+            </div>
+            <h2>لعبة فريق</h2>
+            <button id="reset-button" class="action-button">
+                <span class="material-symbols-outlined">restart_alt</span>
+            </button>
+        </header>
+        
+        <div class="app-container"> 
+            <section class="total-scores-display">
+                
+                <div class="team-total-card team-total-theirs" data-team-key="theirs">
+                    <h3 class="total-label" id="label-team-theirs"></h3> 
+                    <p class="total-score" id="score-team-theirs">0</p>
+                    <button class="add-ten-quick-button action-button" data-team-key="theirs">+10</button>
+                    <span class="win-type-overlay" id="theirs-win-overlay"></span> 
+                    <div class="win-icons" id="win-icons-theirs"></div>
+                </div>
+
+                <div class="team-total-card team-total-ours" data-team-key="ours">
+                    <h3 class="total-label" id="label-team-ours"></h3>
+                    <p class="total-score" id="score-team-ours">0</p>
+                    <button class="add-ten-quick-button action-button" data-team-key="ours">+10</button>
+                    <span class="win-type-overlay" id="ours-win-overlay"></span>
+                    <div class="win-icons" id="win-icons-ours"></div>
+                </div>
+            </section>
+
+            <section class="new-round-input-area">
+                <div class="win-type-buttons">
+                    <button id="win-20" class="win-type-button active" data-win-type="normal">عادي💎</button>
+                    <button id="win-40" class="win-type-button" data-win-type="double">دبل🔥</button>
+                    <button id="win-80" class="win-type-button" data-win-type="double-double">دبلين👑</button>
+                </div>
+
+                <div class="score-input-container">
+                    <div class="input-and-multiplier-wrapper">
+                        <div id="multiplier-display" class="multiplier-display-box">X1</div>
+                        <input type="number" id="score-input-loser" class="score-input" placeholder="نقاط المهزوم" min="0" inputmode="numeric" dir="ltr">
+                    </div>
+                </div>
+                
+                <button id="add-scores-button" class="record-button">تسجيل</button>
+            </section>
+        </div>
+    </div> 
+    
+   <div id="history-screen" class="screen hidden">
+    <header class="app-header team-header">
+        <button class="action-button empty-button"></button>
+        <h2>سجل لفات اللعبة</h2>
+        <button class="action-button empty-button"></button>
+    </header>
+
+    <div class="app-container">
+        <section class="rounds-history-log">
+            <div class="history-header">
+                <span class="history-label round-label">السجل</span> 
+                <span class="history-label delete-label"></span> 
+                </div>
+            <ul id="rounds-list">
+                </ul>
+        </section>
+    </div>
+</div>
+    <div id="win-screen" class="screen hidden">
+    <div class="win-screen-content">
+        <div class="trophy-container">
+            <img src="trophy.png" alt="كأس الفوز" class="trophy-image">
+            <div class="confetti"></div>
+        </div>
+
+        <h1 class="win-text">أفوووووزززز</h1>
+        <h2 id="winner-names">اسم الفريق الفائز</h2>
+        
+        <div id="win-stats-container">
+            
+            <div class="stat-card winner-card" id="winner-stats-card">
+                <div class="win-stats" id="winner-stats-content">
+                </div>
+            </div>
+
+            <div class="stat-card loser-card" id="loser-stats-card">
+                <div class="win-stats" id="loser-stats-content">
+                </div>
+            </div>
+            
+        </div>
+        
+        <button id="win-screen-new-game" class="action-button primary-button large-button">
+            ابدأ لعبة جديدة
+        </button>
+        <button id="win-screen-review" class="action-button secondary-button large-button">
+            مراجعة السجل والنتائج
+        </button>
+    </div>
+</div>
+
+  <div id="game-archive-screen" class="screen hidden">
+    <header class="app-header team-header">
+        <button id="archive-back-button" class="action-button empty-button">
+             </button>
+        <h2>سجل الألعاب</h2>
+        <button class="action-button empty-button"></button> 
+    </header>
+        
+        <div class="app-container game-archive-area">
+            <div id="archive-list-container" class="archive-list">
+                <p id="archive-loading-message" class="loading-message">جاري تحميل سجل الألعاب...</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="settings-screen" class="screen hidden">
+        <header class="app-header team-header">
+            <button id="settings-back-button" class="action-button back-button">
+                <span class="material-symbols-outlined">arrow_back</span> 
+            </button>
+            <h2>الإعدادات</h2>
+            <button class="action-button empty-button"></button>
+        </header>
+        
+        <div class="app-container placeholder-content">
+            <span class="material-symbols-outlined placeholder-icon">construction</span>
+            <p>خيارات تخصيص اللعبة والحساب</p>
+            <h1>قريباً!</h1>
+        </div>
+    </div>
+
+    <footer id="home-nav-bar" class="bottom-nav-bar hidden">
+        <button id="nav-home-history" class="nav-button">
+             <span class="material-symbols-outlined">history</span>
+             <span class="nav-label">سجل الألعاب</span> 
+        </button>
+        
+        <button id="nav-home-main" class="nav-button active">
+             <span class="material-symbols-outlined">home</span>
+             <span class="nav-label">الرئيسية</span>
+        </button>
+        
+        <button id="nav-players" class="nav-button">
+             <span class="material-symbols-outlined">group</span>
+             <span class="nav-label">لوحة الصدارة</span>
+        </button>
+    </footer>
+
+    <footer id="bottom-nav-bar" class="bottom-nav-bar hidden">
+        <button id="nav-scores" class="nav-button active">
+             <span class="material-symbols-outlined">calculate</span>
+             <span class="nav-label">النقاط</span>
+        </button>
+        <button id="nav-history" class="nav-button">
+             <span class="material-symbols-outlined">history</span>
+             <span class="nav-label">اللفات</span> 
+        </button>
+    </footer>
+
+    <div id="penalty-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-button material-symbols-outlined" id="close-penalty-modal">close</span>
+            <h2>عقوبة فورية (-40) 💣</h2>
+            <p>اختر الفريق ثم اللاعب الذي ستسجل عليه العقوبة.</p>
+            
+            <div class="selection-group">
+                <label for="penalty-team-select">اختر الفريق:</label>
+                <select id="penalty-team-select" class="main-button team-option">
+                    <option value="">-- اختر الفريق --</option>
+                </select>
+            </div>
+            
+            <div class="selection-group hidden" id="penalty-player-group">
+                <label for="penalty-player-select">اختر اللاعب:</label>
+                <select id="penalty-player-select" class="main-button team-option">
+                    <option value="">-- اختر اللاعب --</option>
+                </select>
+            </div>
+            
+            <button id="apply-penalty-button" class="main-button primary-button" disabled>
+                تسجيل العقوبة (-40)
+            </button>
+        </div>
+    </div>
+    
+    <div id="player-win-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-button material-symbols-outlined" id="close-player-win-modal">close</span>
+            <h2 id="win-modal-title">تسجيل النقاط</h2>
+            <p id="win-modal-description">اختر اللاعب من الفريق <span id="win-modal-team-name" style="font-weight: bold;"></span> الذي جلب <span id="win-modal-points" style="font-weight: bold;"></span> نقطة.</p>
+            
+            <div class="selection-group">
+                <label for="win-player-select">اختر اللاعب:</label>
+                <select id="win-player-select" class="main-button team-option">
+                    <option value="">-- اختر اللاعب --</option>
+                </select>
+            </div>
+            
+            <button id="confirm-score-player-button" class="main-button primary-button" disabled>
+                تسجيل النقاط
+            </button>
+            
+            <input type="hidden" id="modal-team-key" value="">
+            <input type="hidden" id="modal-round-type" value="">
+            <input type="hidden" id="modal-base-score" value="">
+        </div>
+    </div>
+
+    <div id="emoji-explanation-modal" class="modal hidden">
+        <div class="modal-content explanation-content">
+            <button id="close-explanation-modal" class="close-button" aria-label="إغلاق">
+                <span class="material-symbols-outlined">close</span>
             </button>
-                
-            <section id="add-player-form-area" class="add-player-form-area hidden">
-                
-                <input type="text" id="new-player-name1" placeholder="الاسم الأول" dir="rtl">
-                <input type="text" id="new-player-name2" placeholder="اسم العائلة (اختياري)" dir="rtl">
-                
-              <div class="player-icon-selection">
-                <p>اختر رمزاً/إيموجياً للاعب (حرف واحد):</p>
-                
-                <input type="text" id="new-player-icon-input" placeholder="مثال: 👑" maxlength="2" dir="ltr">
-                
-                <div id="selected-icon-preview" class="player-icon-display">
-                    <span id="preview-icon">👤</span> 
-                </div>
-              </div>
-                
-                <button id="save-new-player" class="main-button team-option">إضافة وحفظ</button>
-            </section>
-
-            <section class="import-section">
-                <p id="import-status"></p>
-            </section>
+            <h2>شرح الرموز والإنجازات ✨</h2>
             
-            <section class="players-list-section">
-                <ul id="players-list">
+            <div class="explanation-sections">
+                
+                <section>
+                    <h3>في سجل الألعاب (Archive):</h3>
+                    <ul>
+                        <li><span class="emoji-icon">💎</span>: **أوكي عادي (20 نقطة)**.</li>
+                        <li><span class="emoji-icon">🔥</span>: **أوكي دبل (40 نقطة)**.</li>
+                        <li><span class="emoji-icon">👑</span>: **أوكي دبل دبل (80 نقطة)**.</li>
+                        <li><span class="emoji-icon">🎯</span>: **عشرة زائدة (+10)**.</li>
+                        <li><span class="emoji-icon">💣</span>: **عقوبة / غش (-40 نقطة)**.</li>
                     </ul>
-            </section>
-        </div>
-        
-        <div id="leaderboard-area" class="hidden">
-            <ul id="leaderboard-list">
-                 </ul>
-        </div>
-        
-    </div>
-</div>
-
-    <div id="score-screen" class="screen hidden">
-        <header class="app-header team-header">
-            <div class="header-action-group">
-                <button id="cancel-game-button" class="action-button">
-                    <span class="material-symbols-outlined">close</span>
-                </button>
-                <button id="quick-penalty-button" class="action-button" title="عقوبة سريعة -40">
-                    <span class="material-symbols-outlined">bomb</span>
-                </button>
-            </div>
-            <h2>لعبة فريق</h2>
-            <button id="reset-button" class="action-button">
-                <span class="material-symbols-outlined">restart_alt</span>
-            </button>
-        </header>
-        
-        <div class="app-container"> 
-            <section class="total-scores-display">
+                </section>
                 
-                <div class="team-total-card team-total-theirs" data-team-key="theirs">
-                    <h3 class="total-label" id="label-team-theirs"></h3> 
-                    <p class="total-score" id="score-team-theirs">0</p>
-                    <button class="add-ten-quick-button action-button" data-team-key="theirs">+10</button>
-                    <span class="win-type-overlay" id="theirs-win-overlay"></span> 
-                    <div class="win-icons" id="win-icons-theirs"></div>
-                </div>
-
-                <div class="team-total-card team-total-ours" data-team-key="ours">
-                    <h3 class="total-label" id="label-team-ours"></h3>
-                    <p class="total-score" id="score-team-ours">0</p>
-                    <button class="add-ten-quick-button action-button" data-team-key="ours">+10</button>
-                    <span class="win-type-overlay" id="ours-win-overlay"></span>
-                    <div class="win-icons" id="win-icons-ours"></div>
-                </div>
-            </section>
-
-            <section class="new-round-input-area">
-                <div class="win-type-buttons">
-                    <button id="win-20" class="win-type-button active" data-win-type="normal">عادي💎</button>
-                    <button id="win-40" class="win-type-button" data-win-type="double">دبل🔥</button>
-                    <button id="win-80" class="win-type-button" data-win-type="double-double">دبلين👑</button>
-                </div>
-
-                <div class="score-input-container">
-                    <div class="input-and-multiplier-wrapper">
-                        <div id="multiplier-display" class="multiplier-display-box">X1</div>
-                        <input type="number" id="score-input-loser" class="score-input" placeholder="نقاط المهزوم" min="0" inputmode="numeric" dir="ltr">
-                    </div>
-                </div>
+                <section>
+                    <h3>في لوحة الصدارة (Leaderboard):</h3>
+                    <ul>
+                        <li><span class="emoji-icon">🏆</span>: **عدد مرات الفوز**.</li>
+                        <li><span class="emoji-icon">💀</span>: **عدد مرات الخسارة**.</li>
+                        <li><span class="emoji-icon">🧮</span>: **إجمالي عدد اللعب**.</li>
+                    </ul>
+                </section>
                 
-                <button id="add-scores-button" class="record-button">تسجيل</button>
-            </section>
-        </div>
-    </div> 
-    
-   <div id="history-screen" class="screen hidden">
-    <header class="app-header team-header">
-        <button class="action-button empty-button"></button>
-        <h2>سجل لفات اللعبة</h2>
-        <button class="action-button empty-button"></button>
-    </header>
-
-    <div class="app-container">
-        <section class="rounds-history-log">
-            <div class="history-header">
-                <span class="history-label round-label">السجل</span> 
-                <span class="history-label delete-label"></span> 
-                </div>
-            <ul id="rounds-list">
-                </ul>
-        </section>
-    </div>
-</div>
-    <div id="win-screen" class="screen hidden">
-    <div class="win-screen-content">
-        <div class="trophy-container">
-            <img src="trophy.png" alt="كأس الفوز" class="trophy-image">
-            <div class="confetti"></div>
-        </div>
-
-        <h1 class="win-text">أفوووووزززز</h1>
-        <h2 id="winner-names">اسم الفريق الفائز</h2>
-        
-        <div id="win-stats-container">
-            
-            <div class="stat-card winner-card" id="winner-stats-card">
-                <div class="win-stats" id="winner-stats-content">
-                </div>
-            </div>
-
-            <div class="stat-card loser-card" id="loser-stats-card">
-                <div class="win-stats" id="loser-stats-content">
-                </div>
+                <section>
+                    <h3>في شاشة النقاط:</h3>
+                    <ul>
+                        <li><span class="emoji-icon">X1</span>: نوع فوز عادي (نقاط الفوز 20).</li>
+                        <li><span class="emoji-icon">X2</span>: نوع فوز دبل (نقاط الفوز 40).</li>
+                        <li><span class="emoji-icon">X4</span>: نوع فوز دبل دبل (نقاط الفوز 80).</li>
+                    </ul>
+                </section>
             </div>
             
-        </div>
-        
-        <button id="win-screen-new-game" class="action-button primary-button large-button">
-            ابدأ لعبة جديدة
-        </button>
-        <button id="win-screen-review" class="action-button secondary-button large-button">
-            مراجعة السجل والنتائج
-        </button>
-    </div>
-</div>
-
-  <div id="game-archive-screen" class="screen hidden">
-    <header class="app-header team-header">
-        <button id="archive-back-button" class="action-button empty-button">
-             </button>
-        <h2>سجل الألعاب</h2>
-        <button class="action-button empty-button"></button> 
-    </header>
-        
-        <div class="app-container game-archive-area">
-            <div id="archive-list-container" class="archive-list">
-                <p id="archive-loading-message" class="loading-message">جاري تحميل سجل الألعاب...</p>
-            </div>
-        </div>
-    </div>
-
-    <div id="settings-screen" class="screen hidden">
-        <header class="app-header team-header">
-            <button id="settings-back-button" class="action-button back-button">
-                <span class="material-symbols-outlined">arrow_back</span> 
-            </button>
-            <h2>الإعدادات</h2>
-            <button class="action-button empty-button"></button>
-        </header>
-        
-        <div class="app-container placeholder-content">
-            <span class="material-symbols-outlined placeholder-icon">construction</span>
-            <p>خيارات تخصيص اللعبة والحساب</p>
-            <h1>قريباً!</h1>
-        </div>
-    </div>
-
-    <footer id="home-nav-bar" class="bottom-nav-bar hidden">
-        <button id="nav-home-history" class="nav-button">
-             <span class="material-symbols-outlined">history</span>
-             <span class="nav-label">سجل الألعاب</span> 
-        </button>
-        
-        <button id="nav-home-main" class="nav-button active">
-             <span class="material-symbols-outlined">home</span>
-             <span class="nav-label">الرئيسية</span>
-        </button>
-        
-        <button id="nav-players" class="nav-button">
-             <span class="material-symbols-outlined">group</span>
-             <span class="nav-label">لوحة الصدارة</span>
-        </button>
-    </footer>
-
-    <footer id="bottom-nav-bar" class="bottom-nav-bar hidden">
-        <button id="nav-scores" class="nav-button active">
-             <span class="material-symbols-outlined">calculate</span>
-             <span class="nav-label">النقاط</span>
-        </button>
-        <button id="nav-history" class="nav-button">
-             <span class="material-symbols-outlined">history</span>
-             <span class="nav-label">اللفات</span> 
-        </button>
-    </footer>
-
-    <div id="penalty-modal" class="modal hidden">
-        <div class="modal-content">
-            <span class="close-button material-symbols-outlined" id="close-penalty-modal">close</span>
-            <h2>عقوبة فورية (-40) 💣</h2>
-            <p>اختر الفريق ثم اللاعب الذي ستسجل عليه العقوبة.</p>
-            
-            <div class="selection-group">
-                <label for="penalty-team-select">اختر الفريق:</label>
-                <select id="penalty-team-select" class="main-button team-option">
-                    <option value="">-- اختر الفريق --</option>
-                </select>
-            </div>
-            
-            <div class="selection-group hidden" id="penalty-player-group">
-                <label for="penalty-player-select">اختر اللاعب:</label>
-                <select id="penalty-player-select" class="main-button team-option">
-                    <option value="">-- اختر اللاعب --</option>
-                </select>
-            </div>
-            
-            <button id="apply-penalty-button" class="main-button primary-button" disabled>
-                تسجيل العقوبة (-40)
+            <button id="hide-explanation-permanently" class="main-button">
+                فهمت، لا تظهر هذا مجدداً
             </button>
         </div>
     </div>
-    
-    <div id="player-win-modal" class="modal hidden">
-        <div class="modal-content">
-            <span class="close-button material-symbols-outlined" id="close-player-win-modal">close</span>
-            <h2 id="win-modal-title">تسجيل النقاط</h2>
-            <p id="win-modal-description">اختر اللاعب من الفريق <span id="win-modal-team-name" style="font-weight: bold;"></span> الذي جلب <span id="win-modal-points" style="font-weight: bold;"></span> نقطة.</p>
-            
-            <div class="selection-group">
-                <label for="win-player-select">اختر اللاعب:</label>
-                <select id="win-player-select" class="main-button team-option">
-                    <option value="">-- اختر اللاعب --</option>
-                </select>
-            </div>
-            
-            <button id="confirm-score-player-button" class="main-button primary-button" disabled>
-                تسجيل النقاط
-            </button>
-            
-            <input type="hidden" id="modal-team-key" value="">
-            <input type="hidden" id="modal-round-type" value="">
-            <input type="hidden" id="modal-base-score" value="">
-        </div>
-    </div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
 <script src="archive-handler.js"></script>
-    <script src="leaderboard-handler.js"></script>
-    <script src="script.js"></script> 
+    <script src="leaderboard-handler.js"></script>
+    <script src="script.js"></script> 
 </body>
 </html>
