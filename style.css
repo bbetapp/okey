@@ -404,7 +404,7 @@ body {
 }
 
 .total-score {
-  font-size: 70px; /* زيادة حجم النقاط بشكل ملحوظ */
+  font-size: 55px; /* زيادة حجم النقاط بشكل ملحوظ */
   font-weight: 900; /* جعل الخط ثقيلاً جداً */
   color: var(--accent-blue);
   margin: 0;
