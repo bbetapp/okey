@@ -838,7 +838,7 @@ function showModeSelection(type) {
     setGameMode(currentMode, modeLimit); 
 }
     // ************************************************************
-// 3.1.7. دالة عرض شاشة الفوز (showWinScreen) - مُعدَّلة للعناوين والعمودين
+// 3.1.7. دالة عرض شاشة الفوز (showWinScreen) - مُعدَّلة للعناوين والعمودين
 // ************************************************************
 function showWinScreen(winnerTeamKey, scoreOurs, scoreTheirs) {
     const winnerTeam = teams[winnerTeamKey];
@@ -1087,40 +1087,35 @@ const headerTitle = document.querySelector('#players-screen .header-title');
         }
     }
     
-    // ************************************************************
-    // 3.2.2. دالة عرض قائمة اللاعبين (renderPlayersList)
-    // ************************************************************
-    function renderPlayersList() {
-        playersListContainer.innerHTML = '';
-        if (currentPlayers.length === 0) {
-            playersListContainer.innerHTML = '<li style="text-align: center; color: var(--gray-inactive); margin-top: 20px;">لا يوجد لاعبون مضافون بعد.</li>';
-            return;
-        }
-
-        currentPlayers.forEach(player => {
-            const listItem = document.createElement('li');
-            listItem.classList.add('player-entry');
-
-            listItem.innerHTML = `
-                <div class="player-info">
-                    <span class="player-icon-display emoji-icon">
-                        ${player.icon} 
-                    </span>
-                    <span class="player-name" data-player-name="${player.name}">${player.name}</span>
-                </div>
-                <button class="action-button delete-player-button" data-player-id="${player.id}">
-                    <span class="material-symbols-outlined" style="font-size: 1.2em; color: var(--red-error);">delete</span>
-                </button>
-            `;
-            
-            listItem.querySelector('.delete-player-button').addEventListener('click', () => {
-                alert('لا يمكن حذف اللاعبين بعد اضافتهم  تواصل مع المبرمج للحذف');
-            });
-            
-            playersListContainer.appendChild(listItem);
-        });
+  // ************************************************************
+// 3.2.2. دالة عرض قائمة اللاعبين (renderPlayersList)
+// ************************************************************
+function renderPlayersList() {
+    playersListContainer.innerHTML = '';
+    if (currentPlayers.length === 0) {
+        playersListContainer.innerHTML = '<li style="text-align: center; color: var(--gray-inactive); margin-top: 20px;">لا يوجد لاعبون مضافون بعد.</li>';
+        return;
     }
 
+    currentPlayers.forEach(player => {
+        const listItem = document.createElement('li');
+        listItem.classList.add('player-entry');
+
+        // تم حذف عنصر <button class="action-button delete-player-button">
+        listItem.innerHTML = `
+            <div class="player-info">
+                <span class="player-icon-display emoji-icon">
+                    ${player.icon} 
+                </span>
+                <span class="player-name" data-player-name="${player.name}">${player.name}</span>
+            </div>
+        `;
+        
+        // تم حذف مستمع الحدث الخاص بزر الحذف أيضاً.
+        
+        playersListContainer.appendChild(listItem);
+    });
+}
     // ************************************************************
     // 3.2.3. دالة ملء قوائم الاختيار (populatePlayerSelects)
     // ************************************************************
