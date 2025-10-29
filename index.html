@@ -99,32 +99,34 @@
                 إضافة لاعب جديد
             </button>
                 
-            <section id="add-player-form-area" class="add-player-form-area hidden">
-                
-                <input type="text" id="new-player-name1" placeholder="الاسم الأول" dir="rtl">
-                <input type="text" id="new-player-name2" placeholder="اسم العائلة (اختياري)" dir="rtl">
-                
-              <div class="player-icon-selection">
-                <p>اختر رمزاً/إيموجياً للاعب (حرف واحد):</p>
-                
-                <input type="text" id="new-player-icon-input" placeholder="مثال: 👑" maxlength="2" dir="ltr">
-                
-                <div id="selected-icon-preview" class="player-icon-display">
-                    <span id="preview-icon">👤</span> 
-                </div>
-              </div>
-                
-                <button id="save-new-player" class="main-button team-option">إضافة وحفظ</button>
-            </section>
+<section id="add-player-form-area" class="add-player-form-area hidden">
+    
+    <div class="name-input-group">
+        <input type="text" id="new-player-name1" placeholder="الاسم الأول" dir="rtl">
+        <input type="text" id="new-player-name2" placeholder="الاسم الثاني" dir="rtl">
+        <input type="text" id="new-player-icon-input" placeholder="👤" maxlength="2" dir="ltr">
+    </div>
+    
+    <button id="save-new-player" class="main-button team-option">إضافة وحفظ</button>
+</section>
 
-            <section class="import-section">
-                <p id="import-status"></p>
-            </section>
-            
-            <section class="players-list-section">
-                <ul id="players-list">
-                    </ul>
-            </section>
+<section class="import-section">
+    <p id="import-status"></p>
+</section>
+
+<section class="players-list-section">
+    <ul id="players-list">
+        </ul>
+</section>
+
+<section class="import-section">
+    <p id="import-status"></p>
+</section>
+
+<section class="players-list-section">
+    <ul id="players-list">
+        </ul>
+</section>
         </div>
         
         <div id="leaderboard-area" class="hidden">
