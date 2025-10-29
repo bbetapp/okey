@@ -1215,7 +1215,10 @@ body {
     gap: 15px;
 }
 
-#new-player-name {
+/* تم تعديل هذا المعرف ليتطابق مع الـ HTML السابق (new-player-name1) إن وجد */
+#new-player-name, 
+#new-player-name1, 
+#new-player-name2 { 
     width: 100%;
     height: 44px;
     padding: 10px;
@@ -1317,8 +1320,101 @@ body {
     border: 3px solid var(--accent-blue); 
 }
 
+/* ************************************************************ */
+/* ✨ التعديل الجديد: قائمة اللاعبين في عمودين */
+/* ************************************************************ */
 
-.player-entry {
+/* تطبيق نظام الشبكة بعمودين على القائمة الرئيسية للاعبين (Players List) */
+#players-list {
+    list-style: none;
+    padding: 0;
+    margin: 15px 0 0 0;
+    display: grid;
+    /* تحديد عمودين متساويين في العرض */
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 10px; /* المسافة بين البطاقات */
+}
+
+/* تنسيق البطاقة الفردية للاعب داخل الشبكة */
+#players-list .player-entry {
+    /* إلغاء تنسيق الـ flex القديم للقائمة الفردية وتعديل شكل البطاقة */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    
+    /* تنسيق البطاقة */
+    background-color: var(--card-background, #aeb1be);
+    border-radius: 50px;
+    padding: 15px 10px;
+    border-bottom: none; /* إزالة الخط الفاصل بين العناصر */
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+    height: auto;
+}
+
+/* تعديل عرض منطقة المعلومات داخل البطاقة */
+#players-list .player-info {
+    flex-direction: column;
+    gap: 5px;
+    margin-bottom: 5px;
+}
+
+#players-list .player-name {
+    font-size: 1em;
+    font-weight: 700;
+}
+
+/* ************************************************************ */
+/* ✨ تنسيق مجموعة حقلي الاسم والإيموجي في صف واحد (3 حقول) */
+/* ************************************************************ */
+.name-input-group {
+    display: flex;
+    gap: 10px; /* المسافة بين الحقول */
+    width: 100%;
+}
+
+.name-input-group input[type="text"] {
+    /* تطبيق التنسيق العام لجميع حقول الإدخال داخل المجموعة */
+    height: 44px;
+    padding: 10px;
+    font-size: 17px;
+    border: 1px solid var(--gray-inactive);
+    border-radius: var(--border-radius);
+    /* توحيد لون الخلفية والحدود (نفس لون مربعات الإدخال) */
+    background-color: var(--bg-primary); 
+    color: var(--text-primary);
+    box-sizing: border-box;
+}
+
+/* توزيع العرض بين حقول الاسم وحقل الإيموجي */
+.name-input-group #new-player-name1,
+.name-input-group #new-player-name2 {
+    flex-grow: 1; /* جعل حقلي الاسم يأخذان مساحة أكبر */
+    flex-basis: 0; /* توزيع مرن للمساحة المتبقية */
+}
+
+.name-input-group #new-player-icon-input {
+    /* جعل حقل الإيموجي يأخذ مساحة ثابتة وصغيرة */
+    flex-grow: 0; 
+    width: 50px; 
+    min-width: 50px;
+    text-align: center;
+    font-size: 1.3em; /* تكبير الإيموجي ليكون واضحاً */
+    padding: 5px; /* تقليل البادينج قليلاً ليتناسب مع الحجم */
+}
+
+/* إخفاء العناصر القديمة المتعلقة بالإيموجي والتي أصبحت غير مستخدمة */
+.player-icon-selection {
+    display: none !important;
+}
+
+/* إخفاء الإجراءات (مثل زر الحذف) وجعلها تظهر عند التمرير إذا لزم الأمر */
+/* إذا كانت هناك أزرار إدارة (تعديل/حذف) يجب أن تضيفها هنا لتبدو جيدة في البطاقة */
+
+
+/* تم إزالة تنسيق .player-entry القديم الذي كان يعتمد على قائمة عمود واحد */
+/* .player-entry {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -1335,7 +1431,8 @@ body {
 .player-name {
     font-size: 17px;
     font-weight: 600;
-}
+} 
+*/
 
 /* =================================================================== */
 /* تأثيرات الحركة (Animations) */
@@ -1468,6 +1565,8 @@ body {
 #top-nav-home-settings:active {
     transform: scale(0.95);
 }
+
+
 /* ========================================================== */
 /* أنماط الشاشات المنبثقة (Modals) - تم نقلها من <style> في HTML */
 /* ========================================================== */
